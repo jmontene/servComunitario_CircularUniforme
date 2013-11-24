@@ -41,38 +41,7 @@ struct sala {
   usuario *usuarios;
 };
 
-/*Funcion que ejecuta los comandos dados por los clientes
-  cada hilo del programa corre una copia de esta funcion
-*/
-void *ejecutarComandos (void *info){
-  //Datos del usuario que este hilo representa
-  usuario *data;
-  data = (usuario *) info;
-
-  while(1) {
-    //Se lee el input del usuario
-    bzero(buffer,256);
-    int n = read((*data).descriptor,buffer,255);
-    if (n < 0) error("ERROR reading from socket");
-  
-    //Se procesa la informacion recibida
-    if(strcmp("fue\n", buffer) == 0){
-      n = write((*data).descriptor,"Te has salido",13);
-      if (n < 0) error("ERROR writing to socket");
-      close((*data).descriptor);
-      pthread_exit(NULL);
-    }else{
-      n = write((*data).descriptor,"Gotcha",6);
-      if (n < 0) error("ERROR writing to socket");
-    }
-  
-    //Se le responde apropiadamente
-  }
-
-  //Al salir, se cierra el fd 
-  close((*data).descriptor);
-  pthread_exit(NULL);
-}
+void *ejecutarComandos (void *info);
 
 int main(int argc, char *argv[])
 {
@@ -131,15 +100,40 @@ int main(int argc, char *argv[])
        ++current_client_pos;
      }
 
-     /*bzero(buffer,256);
-     n = read(newsockfd,buffer,255);
-     if (n < 0) error("ERROR reading from socket");
-     printf("Here is the message: %s\n",buffer);
-     n = write(newsockfd,"I got your message",18);
-     if (n < 0) error("ERROR writing to socket");
-     close(newsockfd);*/
-
      //Fin del programa
      close(sockfd);
      return 0; 
+}
+
+/*Funcion que ejecuta los comandos dados por los clientes
+  cada hilo del programa corre una copia de esta funcion
+*/
+void *ejecutarComandos (void *info){
+  //Datos del usuario que este hilo representa
+  usuario *data;
+  data = (usuario *) info;
+
+  while(1) {
+    //Se lee el input del usuario
+    bzero(buffer,256);
+    int n = read((*data).descriptor,buffer,255);
+    if (n < 0) error("ERROR reading from socket");
+
+    //Se procesa la informacion recibida
+    if(strcmp("fue\n", buffer) == 0){
+      n = write((*data).descriptor,"Te has salido",13);
+      if (n < 0) error("ERROR writing to socket");
+      close((*data).descriptor);
+      pthread_exit(NULL);
+    }else{
+      n = write((*data).descriptor,"Gotcha",6);
+      if (n < 0) error("ERROR writing to socket");
+    }
+
+    //Se le responde apropiadamente
+  }
+
+  //Al salir, se cierra el fd 
+  close((*data).descriptor);
+  pthread_exit(NULL);
 }
