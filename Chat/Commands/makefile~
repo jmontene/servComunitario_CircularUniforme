@@ -1,7 +1,7 @@
 all: main
 
-main: commandManager.o main.o
-	gcc commandManager.o main.o -o main
+main: clientData.o commandManager.o main.o
+	gcc clientData.o commandManager.o main.o -o main
 
 clientData.o: clientData.c clientData.h
 	gcc -c clientData.c
