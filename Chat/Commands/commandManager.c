@@ -60,8 +60,14 @@ void doubleSalas(sala ***salas, int arraySize){
 }
 
 
-void manager_agregarSala(manager *mng, char* sname){
+int manager_agregarSala(manager *mng, char* sname){
   
+    int indexSala = manager_buscarSala(mng, sname);
+    if (indexSala > -1){
+      printf("Error: La Sala ya existe.\n");
+      return 0;
+    }
+ 
     if (mng->numSalas == mng->maxSalas){
     
       doubleSalas(&(mng->salas), mng->maxSalas);
@@ -71,8 +77,7 @@ void manager_agregarSala(manager *mng, char* sname){
  
     mng->salas[mng->numSalas] = sala_crear(sname);
     mng->numSalas = mng->numSalas + 1;
-  
-  
+    return 1;
 }
 
 int manager_buscarCliente(manager *mng, char *clname){
@@ -98,6 +103,7 @@ int manager_suscribirCliente(manager *mng, char *clname, char * sname){
      
     if (indexSala < 0) {
       printf("Error: Sala no encontrada.\n");
+      return 0;
     }
     
     
@@ -168,12 +174,12 @@ void manager_eliminarCliente(manager *mng, char *clname){
    
 
 }
-void manager_eliminarSala(manager *mng, char* sname){
+int manager_eliminarSala(manager *mng, char* sname){
 
     int indexSala = manager_buscarSala(mng, sname);    
     if (indexSala < 0){
       printf("Error: Sala no encontrada.\n");
-      return;
+      return 0;
     }
     
     
@@ -198,6 +204,7 @@ void manager_eliminarSala(manager *mng, char* sname){
     memset(mng->salas[mng->numSalas-1], 0, sizeof (sala *));
     mng->numSalas = mng->numSalas -1;
 
+    return 1;
 }
 
 void manager_mostrarClientes(manager *mng){

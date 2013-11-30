@@ -13,5 +13,5 @@
 int parseInstruction(const char *buffer);
 void writeToServer(const char *mes, int fd);
 void readFromServer(char *buffer, int fd);
-void executeFromFile(const char *file_name, char *buffer,int sockfd);
+void executeFromFile(const char *file_name,int sockfd);
 void serverCommand(const char *buffer);

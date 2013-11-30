@@ -29,6 +29,9 @@ typedef struct clientData{
 //Buffer de escritura
 char buffer[MAX_MSG_SIZE];
 
+//Mutex para manejar sincronizacion de escritura
+pthread_mutex_t mutex;
+
 //Declaraciones Implicitas
 void *ejecutarComandos (void *info);
 void writeToAllClients(manager *mg, const char *str);
@@ -110,6 +113,7 @@ int main(int argc, char *argv[])
   
        //Generando el nuevo usuario, leyendo primero el nombre de dicho usuario
        readFromClient(buffer,newsockfd);
+       writeToClient("OK",newsockfd);
        manager_agregarCliente(mg,buffer,newsockfd);
        manager_suscribirCliente(mg,buffer,salaDef);
        clientData *cd = malloc(sizeof(clientData));
@@ -135,6 +139,7 @@ void *ejecutarComandos (void *info){
   //Datos del usuario que este hilo representa
   clientData *data;
   data = (clientData *) info;
+  char buffer[MAX_MSG_SIZE];
 
   while(1) {
     //Se lee el input del usuario
@@ -142,8 +147,10 @@ void *ejecutarComandos (void *info){
 
     //Se procesa la informacion recibida
     if(strcmp("fue\n", buffer) == 0){
+      pthread_mutex_lock(&mutex);
       manager_eliminarCliente(data->mg,data->nombre);
-      char str[strlen(data->nombre) + strlen("El usuario  se ha desconectado\n")];
+      pthread_mutex_unlock(&mutex);
+      char str[strlen(data->nombre) + strlen("\nEl usuario  se ha desconectado\n")];
       strcpy(str,"El usuario ");
       strcat(str,data->nombre);
       strcat(str," se ha desconectado\n");
@@ -156,17 +163,22 @@ void *ejecutarComandos (void *info){
     }else if (strncmp(buffer,"men ",4) == 0){
       char *men = &buffer[4];
       char *nm = data->nombre;
-      char str[strlen(men) + strlen(nm) + 4];
+      char str[strlen(men) + strlen(nm) + 5];
       strcpy(str,"[");
       strcat(str,nm);
       strcat(str,"]: ");
       strcat(str,men);
+      strcat(str,"\n");
       writeToAllClientRooms(nm,data->mg,str);
     }else if (strncmp(buffer,"sus ",4) == 0){
       char *men = &buffer[4];
       char *statSusc = "Suscrito a la sala ";
-      char *statNoSusc = "Ya estas suscrito a esta sala\n";
-      if(manager_suscribirCliente(data->mg,data->nombre,men)){
+      char *statNoSusc = "Ya estas suscrito a esta sala o la sala no existe\n";
+      int n;
+      pthread_mutex_lock(&mutex);
+      n = manager_suscribirCliente(data->mg,data->nombre,men);
+      pthread_mutex_unlock(&mutex);
+      if(n){
         char str[strlen(statSusc) + strlen(men) + 1];
         strcpy(str,statSusc);
         strcat(str,men);
@@ -177,17 +189,28 @@ void *ejecutarComandos (void *info){
       }
     }else if (strncmp(buffer,"eli ",4) == 0){
       char *men = &buffer[4];
-      char *stat = "Eliminada la sala ";
-      char str[strlen(stat) + strlen(men)];
-      manager_eliminarSala(data->mg,men);
-      strcpy(str,stat);
-      strcat(str,men);
-      strcat(str,"\n");
-      writeToAllClients(data->mg,str);
+      int n;
+      pthread_mutex_lock(&mutex);
+      n = manager_eliminarSala(data->mg,men);
+      pthread_mutex_unlock(&mutex);
+      if(n){
+        char *stat = "Eliminada la sala ";
+        char str[strlen(stat) + strlen(men)];
+        strcpy(str,stat);
+        strcat(str,men);
+        strcat(str,"\n");
+        writeToAllClients(data->mg,str);
+      }else{
+        char *error = "La sala no existe\n";
+        writeToClient(error,data->descriptor);
+      }
+
     }else if (strcmp(buffer,"usu\n") == 0){
       enviarUsuarios(data->mg,data->descriptor);
     }else if (strcmp(buffer,"des\n") == 0){
+      pthread_mutex_lock(&mutex);
       manager_desuscribirCliente(data->mg,data->nombre);
+      pthread_mutex_unlock(&mutex);
       char *stat1 = "El usuario ";
       char *stat2 = " se ha desuscrito de todas las salas\n";
       char str[strlen(stat1) + strlen(data->nombre) + strlen(stat2) + 1];
@@ -197,19 +220,22 @@ void *ejecutarComandos (void *info){
       writeToAllClients(data->mg,str);
    }else if(strncmp(buffer,"cre ",4) == 0){
       char *men = &buffer[4];
-      char *stat1 = "Se ha creado la sala ";
-      char str[strlen(men) + strlen(stat1)+1];
-      strcpy(str,stat1);
-      strcat(str,men);
-      strcat(str,"\n");
-      manager_agregarSala(data->mg,men);
-      writeToAllClients(data->mg,str);
+      pthread_mutex_lock(&mutex);
+      int n = manager_agregarSala(data->mg,men);
+      pthread_mutex_unlock(&mutex);
+      if(manager_agregarSala(data->mg,men)){
+        char *stat1 = "Se ha creado la sala ";
+        char str[strlen(men) + strlen(stat1)+1];
+        strcpy(str,stat1);
+        strcat(str,men);
+        strcat(str,"\n");
+        writeToAllClients(data->mg,str);
+      }else{
+        writeToClient("La sala ya ha sido creada\n",data->descriptor);
+      }
    }else{
-      writeToClient("Error",data->descriptor);
+      writeToClient("Error\n",data->descriptor);
    }
-      
-
-    //Se le responde apropiadamente
   }
 
   //Al salir, se cierra el fd 
@@ -218,6 +244,7 @@ void *ejecutarComandos (void *info){
 }
 
 void writeToAllClients(manager *mg, const char *str){
+  char temp[MAX_MSG_SIZE];
   for(int i = 0;i < mg->numClientes;i++){
     writeToClient(str,mg->clientes[i]->descriptor);
   }
@@ -225,32 +252,38 @@ void writeToAllClients(manager *mg, const char *str){
 
 void writeToAllClientRooms(char *name, manager *mg, const char *men){
   int n = manager_buscarCliente(mg,name);
-  for(int i = 0; i < mg->clientes[n]->numSalas; i++){
+  char temp[MAX_MSG_SIZE];
+  for(int i = 0; i < mg->clientes[n]->numSalas; i++){ 
      for(int j = 0; j < mg->salas[manager_buscarSala(mg,mg->clientes[n]->salas[i])]->numClientes; j++){
-        writeToClient(men,mg->clientes[manager_buscarCliente(mg,mg->salas[i]->clientes[j])]->descriptor);
+         printf("Mandando a %s\n",mg->clientes[manager_buscarCliente(mg,mg->salas[i]->clientes[j])]->name);
+         strcpy(temp,"[");
+         strncat(temp,mg->salas[i]->name,strlen(mg->salas[i]->name) - 1);
+         strcat(temp,"]");
+         strcat(temp,men);
+         writeToClient(temp,mg->clientes[manager_buscarCliente(mg,mg->salas[i]->clientes[j])]->descriptor);
      }
   }
 }
 
 void enviarSalas(manager *mg, int des){
-  int size = MAX_SIZE * (mg->numSalas + 1) + 16;
+  int size = MAX_SIZE * (mg->numSalas) + 17;
   char str[size];
   strcpy(str, "Salas Abiertas:\n");
-  printf("hmm?\n");
   for(int i = 0; i < mg->numSalas ; i++){
      strcat(str,mg->salas[i]->name);
-     strcat(str,"\n");
   }
+  strcat(str,"\n");
   writeToClient(str,des);
 }  
 
 void enviarUsuarios(manager *mg, int des){
-  int size = MAX_SIZE * (mg->numClientes + 1) + 21;
+  int size = MAX_SIZE * (mg->numClientes + 1) + 22;
   char str[size];
   strcpy(str, "Usuarios Conectados:\n"); 
   for(int i = 0; i < mg->numClientes;i++){
      strcat(str,mg->clientes[i]->name);
      strcat(str,"\n");
   }
+  strcat(str,"\n");
   writeToClient(str,des);
 }

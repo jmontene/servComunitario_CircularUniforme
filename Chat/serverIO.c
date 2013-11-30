@@ -18,7 +18,7 @@ void readFromClient(char *buffer, int fd){
 
 void writeToClient(const char *mes, int fd){
   int n;
-  n = write(fd,mes,strlen(mes)-1);
+  n = write(fd,mes,strlen(mes)+1);
   if (n < 0)
      error("ERROR writing to socket");
 }

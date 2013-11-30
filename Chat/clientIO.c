@@ -47,35 +47,30 @@ void readFromServer(char *buffer, int fd){
      error("ERROR reading from socket");
 }
 
-void serverCommand(const char *buffer){
-  if(strcmp(buffer,"DISCONNECT") == 0) {
-     printf("Te has desconectado\n");
-     exit(0);
-  }else{
-     printf("%s",buffer);
-  }
-}
-
 /*Lee y ejecuta los contenidos del archivo si hay uno
 */
 
-void executeFromFile(const char *file_name, char *buffer, int sockfd){
+void executeFromFile(const char *file_name, int sockfd){
   FILE *fp;
+  char buffer[MAX_MSG_SIZE];
 
   if(file_name != NULL){
-      fp = fopen(file_name,"r");
+      fp = fopen(file_name,"rt");
       if (fp == NULL) {
-        error("Error opening file");
+        error("Error opening file",sockfd);
       }
-      size_t len = 0;
       int i = 1;
-      while (fgets(buffer, sizeof(buffer), fp) != NULL ) {
-        if(parseInstruction(buffer)){
-          printf("Error de sintaxis en linea %d del archivo de instrucciones\n", i);
+      while (fgets(buffer,sizeof(buffer),fp) != NULL) {
+        if(parseInstruction(buffer) == 1){
+          printf("Error en la linea %d del archivo\n",i);
         }else{
           writeToServer(buffer,sockfd);
+          if(strcmp(buffer,"fue\n") == 0){
+             printf("Te has desconectado\n");
+             exit(0);
+          }
           readFromServer(buffer,sockfd);
-          serverCommand(buffer);
+          printf("%s",buffer);
         }
         ++i;
       }
