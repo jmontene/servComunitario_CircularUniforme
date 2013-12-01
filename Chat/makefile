@@ -1,25 +1,23 @@
-client: clientIO.o client.o
-	gcc clientIO.o client.o -o client
+all: schat cchat
 
-clientIO.o: clientIO.c clientIO.h
+schat: clientData.o commandManager.o serverIO.o
+	gcc clientData.o commandManager.o serverIO.o schat.c -o schat -pthread -std=gnu99
+
+
+clientData.o: Commands/clientData.c
+	gcc -c Commands/clientData.c
+
+commandManager.o: Commands/commandManager.c
+	gcc -c Commands/commandManager.c 
+
+serverIO.o: serverIO.c
+	gcc -c serverIO.c
+
+cchat: clientIO.o
+	gcc clientIO.o cchat.c -o cchat -pthread -std=gnu99
+
+clientIO.o: clientIO.c
 	gcc -c clientIO.c
 
-client.o: client.c
-	gcc -c main.c
-
-all: main
-
-main: clientData.o commandManager.o main.o
-	gcc clientData.o commandManager.o main.o -o main
-
-clientData.o: clientData.c clientData.h
-	gcc -c clientData.c
-
-commandManager.o: clientData.o commandManager.h commandManager.c 
-	gcc -c commandManager.c 
-
-main.o: main.c
-	gcc -c main.c
-
 clean: 
-	rm -f *.o main
+	rm -f *.o schat cchat

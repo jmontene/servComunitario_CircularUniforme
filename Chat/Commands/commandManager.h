@@ -40,7 +40,7 @@ manager* manager_crear();
  * @param mng manager a ser modificado
  * @param clname nombre del cliente a agregar
  */
-void manager_agregarCliente(manager *mng, char* clname, int fd);
+int manager_agregarCliente(manager *mng, char* clname, int fd);
 
 /**
  * Agrega una sala al manejador
@@ -87,7 +87,7 @@ int manager_suscribirCliente(manager *mng, char *clname, char * sname);
  * @param clname nombre del cliente a desuscribir
  */
 
-void manager_desuscribirCliente(manager *mng, char *clname);
+int manager_desuscribirCliente(manager *mng, char *clname);
 
 /**
  * Elimina un cliente del manejador

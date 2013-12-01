@@ -269,7 +269,7 @@ int  manager_suscribirCliente(manager *mng, char *clname, char * sname){
  * @param mng manager a modificar
  * @param clname nombre del cliente a desuscribir
  */
-void manager_desuscribirCliente(manager *mng, char *clname){
+int manager_desuscribirCliente(manager *mng, char *clname){
 
     //Busca el cliente
     int indexCliente = manager_buscarCliente(mng, clname);
@@ -277,14 +277,14 @@ void manager_desuscribirCliente(manager *mng, char *clname){
    //Revisa que el cliente exista 
     if (indexCliente < 0){
       printf("Error: Cliente no encontrado.\n");
-      return;
+      return 0;
     
     }    
     
     //Revisa que el cliente se encuentre suscrito a alguna sala
     if (mng->clientes[indexCliente]->numSalas <= 0){
       printf("Error: Cliente no posee suscripciones");
-      return;
+      return 0;
     }
     
     //Elimina la informacion del cliente en todas las salas
@@ -300,6 +300,7 @@ void manager_desuscribirCliente(manager *mng, char *clname){
     
     //Elimina las salas del cliente.
     cliente_borrarSalas(mng->clientes[indexCliente]);
+    return 1;
 
 }
 
