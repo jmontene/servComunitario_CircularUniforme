@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
          bzero(salaDefecto,MAX_MSG_SIZE);
          strcpy(salaDefecto,argv[i+1]);
        }else{
-         error(argv[i]);
+         fprintf(stderr,"uso: %s -p puerto -s sala\n", argv[0]);
+         exit(0);
        }
      }
      
@@ -80,8 +81,10 @@ int main(int argc, char *argv[])
      manager *mg;
      mg = manager_crear(salaDef);
  
-     if(p)
-       error("No se especificó numero de puerto"); 
+     if(p){
+       fprintf(stderr,"uso: %s -p puerto -s sala\n", argv[0]);
+       exit(0);
+     }
 
      //Creacion del socket
      sockfd = socket(AF_INET, SOCK_STREAM, 0);
