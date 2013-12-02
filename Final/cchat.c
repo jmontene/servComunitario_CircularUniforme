@@ -126,13 +126,11 @@ int main(int argc, char *argv[])
         writeToServer(buffer,sockfd);
         if(strcmp(buffer,"fue\n") == 0){
            printf("Te has desconectado\n");
+           close(sockfd);
            exit(0);
         }
       }
     }
-
-    close(sockfd);
-    return 0;
 }
 
 /*Obtiene la direccion ip del servidor, convirtiendo el string pasado a
