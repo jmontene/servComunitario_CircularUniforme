@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
-#include "Commands/commandManager.h"
+#include "commandManager.h"
 #include "serverIO.h"
 #define MAX_THREADS 256
 #define MAX_MSG_SIZE 256
@@ -70,9 +70,15 @@ int main(int argc, char *argv[])
        }
      }
      
+     //De una vez se crea la sala por defecto
+     char salaDef[strlen(salaDefecto) + 1];
+     strcpy(salaDef,salaDefecto);
+     strcat(salaDef,"\n");
+     
+     
      //Se hace una nueva inicializacion del commandManager
      manager *mg;
-     mg = manager_crear();
+     mg = manager_crear(salaDef);
  
      if(p)
        error("No se especificó numero de puerto"); 
@@ -90,12 +96,6 @@ int main(int argc, char *argv[])
      if (bind(sockfd, (struct sockaddr *) &serv_addr,
               sizeof(serv_addr)) < 0) 
               error("ERROR on binding");
-
-     //De una vez se crea la sala por defecto
-     char salaDef[strlen(salaDefecto) + 1];
-     strcpy(salaDef,salaDefecto);
-     strcat(salaDef,"\n");
-     manager_agregarSala(mg,salaDef);
 
      //Se comienza a escuchar requests
      listen(sockfd,5);
@@ -193,7 +193,7 @@ void *ejecutarComandos (void *info){
       pthread_mutex_lock(&mutex);
       n = manager_eliminarSala(data->mg,men);
       pthread_mutex_unlock(&mutex);
-      if(n){
+      if(n > 0){
         char *stat = "Eliminada la sala ";
         char str[strlen(stat) + strlen(men)];
         strcpy(str,stat);
@@ -212,21 +212,25 @@ void *ejecutarComandos (void *info){
       enviarUsuarios(data->mg,data->descriptor);
     }else if (strcmp(buffer,"des\n") == 0){
       pthread_mutex_lock(&mutex);
-      manager_desuscribirCliente(data->mg,data->nombre);
+      int n = manager_desuscribirCliente(data->mg,data->nombre);
       pthread_mutex_unlock(&mutex);
-      char *stat1 = "El usuario ";
-      char *stat2 = " se ha desuscrito de todas las salas\n";
-      char str[strlen(stat1) + strlen(data->nombre) + strlen(stat2) + 1];
-      strcpy(str,stat1);
-      strcat(str,data->nombre);
-      strcat(str,stat2);
-      writeToAllClients(data->mg,str);
+      if(n){
+        char *stat1 = "El usuario ";
+        char *stat2 = " se ha desuscrito de todas las salas\n";
+        char str[strlen(stat1) + strlen(data->nombre) + strlen(stat2) + 1];
+        strcpy(str,stat1);
+        strcat(str,data->nombre);
+        strcat(str,stat2);
+        writeToAllClients(data->mg,str);
+     }else{
+        writeToClient("No estas suscrito a ninguna sala\n",data->descriptor);
+     }
    }else if(strncmp(buffer,"cre ",4) == 0){
       char *men = &buffer[4];
       pthread_mutex_lock(&mutex);
       int n = manager_agregarSala(data->mg,men);
       pthread_mutex_unlock(&mutex);
-      if(manager_agregarSala(data->mg,men)){
+      if(n){
         char *stat1 = "Se ha creado la sala ";
         char str[strlen(men) + strlen(stat1)+1];
         strcpy(str,stat1);
