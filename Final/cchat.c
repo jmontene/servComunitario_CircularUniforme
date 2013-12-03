@@ -19,6 +19,12 @@ void error(const char *msg, int sockfd){
     exit(0);
 }
 
+/**
+ * Manejador de señales estandar. Usado para evitar que el usuario 
+ * mate el proceso
+ * @param signum numero de señal enviada 
+ * @return void
+ */
 void sigHandler(int signum){
   printf("\nPara salir, use el comando fue\n");
 }
@@ -28,6 +34,7 @@ typedef struct servData{
   int fd;
 }servData;
 
+//Declaraciones implicitas. Se especifica su funcionamiento al final del codigo
 struct hostent *obtenerDireccion(const char *addr);
 void *leerRespuestas(void *info);
 
@@ -133,8 +140,14 @@ int main(int argc, char *argv[])
     }
 }
 
-/*Obtiene la direccion ip del servidor, convirtiendo el string pasado a
-un objeto hostent*/
+/**
+ * Obtiene la direccion del server de una ip o hostname dado
+ * Parsea el texto dado con un regex para determinar si es ip o no
+ * Luego usa gethostbyaddr o gesthostbyname dependiendo del caso
+ * @param addr cadena de caracteres que representa una ip o hostname
+ * @param fd file descriptor del cliente 
+ * @return hostent estructura que representa la direccion del server
+ */
 struct hostent *obtenerDireccion(const char *addr){
   regex_t regex;
   int reti;
@@ -155,6 +168,12 @@ struct hostent *obtenerDireccion(const char *addr){
   return server;
 }
 
+/**
+ * Hilo que lee todos los mensajes del server y los imprime en pantalla
+ * @param info pointer a la estructura que contiene informacion necesaria para
+ * el funcionamiento de la funcion        
+ * @return void
+ */
 void *leerRespuestas(void *info){
   servData * data;
   data = (servData *) info;

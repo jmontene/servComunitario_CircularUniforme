@@ -32,7 +32,7 @@ char buffer[MAX_MSG_SIZE];
 //Mutex para manejar sincronizacion de escritura
 pthread_mutex_t mutex;
 
-//Declaraciones Implicitas
+//Declaraciones Implicitas. Se explica su funcionamiento en su implementacion al final del codigo
 void *ejecutarComandos (void *info);
 void writeToAllClients(manager *mg, const char *str);
 void writeToAllClientRooms(char *name, manager *mg, const char *men);
@@ -250,6 +250,15 @@ void *ejecutarComandos (void *info){
   pthread_exit(NULL);
 }
 
+/**
+/**
+ * Escribe un mensaje a todos los clientes
+ * Los busca en la lista de clientes del manager dado
+ * Envia la informacion a cada uno de sus file descriptors
+ * @param mg manager que contiene los datos
+ * @param str mensaje a escribir a los clientes
+ * @return void
+ */
 void writeToAllClients(manager *mg, const char *str){
   char temp[MAX_MSG_SIZE];
   for(int i = 0;i < mg->numClientes;i++){
@@ -257,6 +266,16 @@ void writeToAllClients(manager *mg, const char *str){
   }
 }
 
+/**
+/**
+ * Escribe un mensaje a todos los clientes suscritos a las
+ * salas a las cual esta suscrito el cliente especificado
+ * Envia la informacion a cada uno de sus file descriptors
+ * @param name nombre del cliente que envia los datos
+ * @param mg manager que contiene los datos de salas y clientes
+ * @param men mensaje a mandar a los clientes seleccionados
+ * @return void
+ */
 void writeToAllClientRooms(char *name, manager *mg, const char *men){
   int n = manager_buscarCliente(mg,name);
   char temp[MAX_MSG_SIZE];
@@ -272,6 +291,14 @@ void writeToAllClientRooms(char *name, manager *mg, const char *men){
   }
 }
 
+/**
+ * Escribe al cliente dado el nombre de todas las salas abiertas
+ * Envia la informacion a cada uno de sus file descriptors 
+ * @param mg manager que contiene los datos de salas y clientes
+ * @param des file descriptor del cliente a mandarle la informacion 
+ * @param men mensaje a mandar a los clientes seleccionados
+ * @return void
+ */
 void enviarSalas(manager *mg, int des){
   int size = MAX_SIZE * (mg->numSalas) + 17;
   char str[size];
@@ -283,6 +310,13 @@ void enviarSalas(manager *mg, int des){
   writeToClient(str,des);
 }  
 
+/**
+ * Escribe al cliente dado el nombre de todas los usuarios conectados
+ * Envia la informacion a cada uno de sus file descriptors 
+ * @param mg manager que contiene los datos de salas y clientes
+ * @param des file descriptor del cliente a mandarle la informacion 
+ * @return void
+ */
 void enviarUsuarios(manager *mg, int des){
   int size = MAX_SIZE * (mg->numClientes + 1) + 22;
   char str[size];

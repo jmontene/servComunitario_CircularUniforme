@@ -6,6 +6,8 @@
 
 ===============================================================================
 
+NOTA: Para comoilar se usaron los flags -pthread y -std=gnu99
+
 +SERVIDOR (SCHAT)
 
 -Corrida: El programa servidor schat es invocado por el terminal con la linea

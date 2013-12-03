@@ -91,6 +91,7 @@ void doubleClientes(cliente ***clientes, int arraySize){
  * Imprime un mensaje de error si ya existe.
  * @param mng manager a ser modificado
  * @param clname nombre del cliente a agregar
+ * @param fd file descriptor del cliente
  */
 int manager_agregarCliente(manager *mng, char* clname, int fd){
 
