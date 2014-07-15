@@ -29,11 +29,13 @@ function create(){
     ball.anchor.setTo(0.5,0.5);
     ball.scale.setTo(0.05,0.05);
 
+    //Crear el boton que controla la pausa y el play
     button = game.add.button(0,0,'button',onClick,this,1,1,0);
     button.scale.setTo(0.5,0.5);
 }
 
 function update(){
+    //Cambia el booleano que controla el play y el stop
     if(play){
 	time ++;
     }else{
@@ -55,6 +57,7 @@ function sliderChange(val){
     document.getElementById('sliderStatus').innerHTML = val;
 }
 
+//Se activa cuando se le da click al boton
 function onClick () {
     play =! play;
     if(play){
