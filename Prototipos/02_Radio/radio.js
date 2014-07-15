@@ -1,6 +1,6 @@
 
 //Creacion del juego
-var game = new Phaser.Game(750,750,Phaser.AUTO,'',{preload : preload, create : create, update : update});
+var game = new Phaser.Game(600,600,Phaser.AUTO,'',{preload : preload, create : create, update : update});
 
 //Angulo (en radianes) y el radio
 var angle = 0.1;
