@@ -18,21 +18,26 @@ function preload(){
 
 function create(){
     
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
     //Crear el sprite de la tierra y centrarlo tanto con respecto a si mismo como
     //Con el mundo. Escalarlo a la mitad
     earth = game.add.sprite(game.world.centerX,game.world.centerY,'earth');
     earth.anchor.setTo(0.5,0.5);
     earth.scale.setTo(0.3,0.3);
-
-
-    //Crear el boton que controla la pausa y el play
-    button = game.add.button(0,0,'button',onClick,this,1,1,0);
-    button.scale.setTo(0.5,0.5);
+    game.physics.enable(earth,Phaser.Physics.ARCADE);
         
     //Crea el enemigo
     enemy = new Enemy('enemy',50,50,5);
     enemy.sprite.anchor.setTo(0.5,0.5);
     enemy.sprite.scale.setTo(0.25,0.25);
+
+    game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
+    enemy.sprite.body.collideWorldBounds = true;
+
+    //Crear el boton que controla la pausa y el play
+    button = game.add.button(0,0,'button',onClick,this,1,1,0);
+    button.scale.setTo(0.5,0.5);
 
 }
 
@@ -44,9 +49,13 @@ function update(){
     }else{
 	time = 1;
 	enemy.reset()
-    }
-    
 
+    }
+    game.physics.arcade.collide(earth, enemy.sprite, collide, null, this);
+}
+
+function collide(earth, enemy){
+    earth.kill();
 }
 
 //Se activa cuando se le da click al boton
@@ -75,11 +84,11 @@ function Enemy(img,x,y,d){
 }
 
 Enemy.prototype.reset = function(){
-    this.sprite.x = this.x
-    this.sprite.y = this.y
+    this.sprite.body.x = this.x
+    this.sprite.body.y = this.y
 }
 
 Enemy.prototype.move = function(){
-    this.sprite.x = this.sprite.x + this.dirx*this.d
-    this.sprite.y = this.sprite.y + this.diry*this.d
+    this.sprite.body.x = this.sprite.body.x + this.dirx*this.d
+    this.sprite.body.y = this.sprite.body.y + this.diry*this.d
 }
