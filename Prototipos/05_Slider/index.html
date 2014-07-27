@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> Prototype </title>
+  <script type="text/javascript" src="js/phaser.min.js"></script>
+  <script type="text/javascript" src="classes/Slider.js"></script>
+  <style type="text/css">
+    body {
+       margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <script type="text/javascript">
+  
+    //Creacion del juego
+    var game = new Phaser.Game(500,500,Phaser.AUTO,'',{preload : preload, create : create, update : update});
+    
+    //Slider de prueba
+    var slider = null;
+    
+    function preload(){
+      game.stage.backgroundColor = 0x00ff00;
+    
+      slider = new Slider(game,60,360,1,180);
+      slider.preload('backSlider','assets/slider.png','buttonSlider',
+                     'assets/buttonSlider.png');
+    }
+    
+    function create(){
+      slider.create(70,200);
+    }
+    
+    function update(){
+      slider.update();
+    }
+    
+  </script>
+  
+</body>
+</html>
