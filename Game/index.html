@@ -1,29 +1,60 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title> Prototype </title>
-  <script type="text/javascript" src="js/phaser.js"></script>
-  <script type="text/javascript" src="sauce.js"></script>
-  <style type="text/css">
-    body {
-       margin: 0;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title> Prototype </title>
 
-  <script type="text/javascript" src="main.js">
-  </script>
+    <!-- Aqui estan las variables globales que se usan en el resto del codigo -->
+    <!-- declararlas aqui para mantener un orden -->
+    <!-- Hay que ver como hacer que dejen de ser globales -->
+    <script type="text/javascript">
+      var Game = {};
+      var play;
+      var result = "...";
+      var dummyradio;
+    </script>
 
-  <!-- Slider Html5 -->
-  <input type="range" min="0" max="800" value="0" step="1" 
-	 onChange="sliderChange(this.value)" />
-  <br /> <br />
-  
-  <!-- Label que indica el valor del slider -->
-  Radio = <span id="sliderStatus">0</span>
+    <script type="text/javascript" src="js/phaser.js"></script>
 
-  
-</body>
+    <!-- Aqui esta todo lo referente a la definicion de los enemigos/aliados -->
+    <!-- asi como funciones que se usan en mas de 1 state -->
+    <script type="text/javascript" src="sauce.js"></script>
+
+    <!-- Definicion de los states del juego -->
+    <script type="text/javascript" src="boot.js"></script>
+    <script type="text/javascript" src="level1.js"></script>
+    
+    <style type="text/css">
+      body {
+      margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      window.onload = function() {
+      
+      var game = new Phaser.Game(600,600,Phaser.AUTO,'gameContainer');
+
+      // Se agregan los state al juego
+      // Definir cada nivel en un state aparte, y cada state en un js diferente
+      game.state.add('level1', Game.level1);
+      game.state.add('boot', Game.boot);
+
+      // Se comienza el state boot
+      game.state.start('boot');
+
+      };
+    </script>
+
+    <!-- Slider Html5 -->
+    <input type="range" min="0" max="800" value="0" step="1" 
+	   onChange="sliderChange(this.value)" />
+    <br /> <br />
+    
+    <!-- Label que indica el valor del slider -->
+    Radio = <span id="sliderStatus">0</span>
+
+    
+  </body>
 </html>

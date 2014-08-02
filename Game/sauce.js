@@ -1,5 +1,5 @@
 //Definicion de la clase Enemy
-function Enemy(img,x,y,d,target){
+function Enemy(img,x,y,d,target,game){
     this.sprite = game.add.sprite(x,y,img);
     this.x = x
     this.y = y
@@ -27,7 +27,7 @@ Enemy.prototype = {
 };
 
 //Definicion de la clase Ally
-function Ally(img,angle,radius,target){
+function Ally(img,angle,radius,target,game){
     spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
     this.sprite = spdummy
     this.angle = angle;
@@ -73,4 +73,35 @@ Ally.prototype = {
 	this.sprite.body.y = (this.radius * Math.sin(this.angle*time)) +
 	    this.target.body.center.y-this.yfix;
     }
+}
+
+//Definicion de las colisiones
+function collide_earth(earth, enemy){
+    result = ":("
+    console.log(result);
+    onClick();
+}
+
+function collide_ally(earth, enemy){
+    result = ":)"
+    console.log(result);
+    onClick();
+}
+
+//Se activa cuando se le da click al boton
+function onClick () {
+    play =! play;
+    if(play){
+	button.setFrames(0,0,1);
+    }else{
+	button.setFrames(1,1,0);
+    }
+}
+
+//Esta funcion lee el valor del slider
+function sliderChange(val){
+    dummyradio = val;
+    //Aqui se obtiene el valor del label que indica el valor del slider y se
+    //cambia
+    document.getElementById('sliderStatus').innerHTML = val;
 }
