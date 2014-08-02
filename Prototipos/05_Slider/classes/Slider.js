@@ -19,17 +19,19 @@ Slider.prototype = {
     this.slideID = sID;
   },
   
-  create: function(xCoord, yCoord) {
+  create: function(xCoord, yCoord, scaleX, scaleY) {
     this.slide = game.add.sprite(xCoord,yCoord,this.slideID);
     this.slide.anchor.setTo(0,0.5);
+    this.slide.scale.setTo(scaleX,scaleY);
     this.button = game.add.sprite(xCoord,yCoord,this.buttonID);
     this.button.anchor.setTo(0.5,0.5);
+    this.button.scale.setTo(scaleX,scaleY);
   },
   
   update: function() {
     if(this.game.input.mousePointer.isDown){
       if(Phaser.Rectangle.contains(new Phaser.Rectangle(this.slide.x,this.slide.y-90,this.slide.width,this.button.height*200),this.game.input.x,this.game.input.y)){
-        this.changeValue(this.minValue + this.maxValue * ((this.game.input.x - this.slide.x)/this.slide.width));
+        this.changeValue(this.minValue + (this.maxValue - this.minValue) * ((this.game.input.x - this.slide.x)/this.slide.width));
       }
     }
     this.button.x = (this.value <= this.minValue) ? this.slide.x : 
@@ -43,7 +45,7 @@ Slider.prototype = {
   },
   
   changeValue: function(val) {
-    this.value = (val <= this.minValue) ? this.minValue : 
-                 (val >= this.maxValue) ? this.maxValue : val;
+    this.value = Math.ceil((val <= this.minValue) ? this.minValue : 
+                 (val >= this.maxValue) ? this.maxValue : val);
   }
 };
