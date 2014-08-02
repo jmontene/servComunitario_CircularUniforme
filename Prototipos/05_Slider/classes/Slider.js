@@ -30,7 +30,7 @@ Slider.prototype = {
   
   update: function() {
     if(this.game.input.mousePointer.isDown){
-      if(Phaser.Rectangle.contains(new Phaser.Rectangle(this.slide.x,this.slide.y-90,this.slide.width,this.button.height*200),this.game.input.x,this.game.input.y)){
+      if(Phaser.Rectangle.contains(new Phaser.Rectangle(this.slide.x,this.button.y-this.button.height/2,this.slide.width,this.button.height),this.game.input.x,this.game.input.y)){
         this.changeValue(this.minValue + (this.maxValue - this.minValue) * ((this.game.input.x - this.slide.x)/this.slide.width));
       }
     }
