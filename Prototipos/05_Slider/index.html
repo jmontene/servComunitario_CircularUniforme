@@ -16,7 +16,7 @@
   <script type="text/javascript">
   
     //Creacion del juego
-    var game = new Phaser.Game(500,500,Phaser.AUTO,'',{preload : preload, create : create, update : update});
+    var game = new Phaser.Game(800,600,Phaser.AUTO,'',{preload : preload, create : create, update : update});
     
     //Slider de prueba
     var slider = null;
@@ -24,13 +24,13 @@
     function preload(){
       game.stage.backgroundColor = 0x00ff00;
     
-      slider = new Slider(game,60,360,1,180);
+      slider = new Slider(game,0,100,1,50);
       slider.preload('backSlider','assets/slider.png','buttonSlider',
                      'assets/buttonSlider.png');
     }
     
     function create(){
-      slider.create(70,200);
+      slider.create(70,200,1,1);
     }
     
     function update(){
