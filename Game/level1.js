@@ -12,17 +12,17 @@ Game.level1.prototype = {
 	
 	earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
 	earth.anchor.setTo(0.5,0.5);
-	earth.scale.setTo(0.3,0.3);
+	earth.scale.setTo(0.175,0.175);
 	this.game.physics.enable(earth,Phaser.Physics.ARCADE);
 	earth.body.immovable = true;
-	earth.body.center.x = 300
-	earth.body.center.y = 300
+	earth.body.center.x = this.game.world.centerX
+	earth.body.center.y = this.game.world.centerY
 	
 	
 	//Crea el enemigo
 	enemy = new Enemy('enemy',400,50,5,earth,this.game);
 	enemy.sprite.anchor.setTo(0.5,0.5);
-	enemy.sprite.scale.setTo(0.25,0.25);
+	enemy.sprite.scale.setTo(0.03,0.03);
 	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 	enemy.sprite.body.collideWorldBounds = true;
 	
@@ -32,9 +32,10 @@ Game.level1.prototype = {
 	
 	//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 	//Y depende del radio
-	ball = new Ally('ball',300,375,0.12,earth,this.game);
+	ball = new Ally('ball',300,375,0.12,1,earth,this.game);
 	ball.sprite.anchor.setTo(0.5,0.5);
 	ball.sprite.scale.setTo(0.05,0.05);
+	ball.sprite.scale.x *= -ball.dir;
 	this.game.physics.enable(ball.sprite,Phaser.Physics.ARCADE);
 	ball.initialize();    
 

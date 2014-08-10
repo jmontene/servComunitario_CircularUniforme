@@ -21,10 +21,11 @@ Enemy.prototype = {
 };
 
 //Definicion de la clase Ally
-function Ally(img,x,y,angle,target,game){
+function Ally(img,x,y,angle,dir,target,game){
     var spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
     this.sprite = spdummy;
     this.angle = angle;
+    this.dir = dir;
     
     var pinitial = new Phaser.Point(x,y);
     this.radius = Phaser.Point.distance(pinitial,target.body.center);
@@ -68,13 +69,17 @@ Ally.prototype = {
 	}
     },
     
-    move: function(time){	
+    move: function(time){
+	var dummy_angle = (this.dir*this.angle*time) + this.inicial_angle;
+    
 	this.sprite.body.x =
-	    (this.radius * Math.cos((this.angle*time) + this.inicial_angle)) +
+	    (this.radius * Math.cos(dummy_angle)) +
 	    this.target.body.center.x-this.fix.x;
 	this.sprite.body.y = 
-	    (this.radius * Math.sin((this.angle*time) + this.inicial_angle)) +
+	     (this.radius * Math.sin(dummy_angle)) +
 	    this.target.body.center.y-this.fix.y;
+    
+	this.sprite.angle = Phaser.Math.radToDeg(dummy_angle)+90;
 
     }
 }
@@ -84,6 +89,7 @@ function collide_earth(earth, enemy){
     result = ":("
     console.log(result);
     onClick();
+    this.state.start('menu')
 }
 
 function collide_ally(earth, enemy){
