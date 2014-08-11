@@ -18,14 +18,16 @@ Slider.prototype = {
     this.buttonID = bID;
     this.slideID = sID;
   },
-  
-  create: function(xCoord, yCoord, scaleX, scaleY) {
+
+    create: function(xCoord, yCoord, 
+		     scaleXb, scaleYb,
+		     scaleXs, scaleYs) {
     this.slide = game.add.sprite(xCoord,yCoord,this.slideID);
     this.slide.anchor.setTo(0,0.5);
-    this.slide.scale.setTo(scaleX,scaleY);
+    this.slide.scale.setTo(scaleXs,scaleYs);
     this.button = game.add.sprite(xCoord,yCoord,this.buttonID);
     this.button.anchor.setTo(0.5,0.5);
-    this.button.scale.setTo(scaleX,scaleY);
+    this.button.scale.setTo(scaleXb,scaleYb);
   },
   
   update: function() {
