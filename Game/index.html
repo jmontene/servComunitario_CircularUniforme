@@ -35,11 +35,12 @@
     <script type="text/javascript">
       window.onload = function() {
       
-      var game = new Phaser.Game(600,600,Phaser.AUTO,'gameContainer');
+      var game = new Phaser.Game(800,600,Phaser.AUTO,'gameContainer');
 
       // Se agregan los state al juego
       // Definir cada nivel en un state aparte, y cada state en un js diferente
       game.state.add('level1', Game.level1);
+      game.state.add('menu', Game.menu);
       game.state.add('boot', Game.boot);
 
       // Se comienza el state boot
