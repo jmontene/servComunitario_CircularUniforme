@@ -18,11 +18,12 @@
 
     <!-- Aqui esta todo lo referente a la definicion de los enemigos/aliados -->
     <!-- asi como funciones que se usan en mas de 1 state -->
-    <script type="text/javascript" src="sauce.js"></script>
+    <script type="text/javascript" src="src/sauce.js"></script>
+    <script type="text/javascript" src="src/Slider.js"></script>
 
     <!-- Definicion de los states del juego -->
-    <script type="text/javascript" src="boot.js"></script>
-    <script type="text/javascript" src="level1.js"></script>
+    <script type="text/javascript" src="src/boot.js"></script>
+    <script type="text/javascript" src="src/levels/level1.js"></script>
     
     <style type="text/css">
       body {
@@ -46,14 +47,6 @@
 
       };
     </script>
-
-    <!-- Slider Html5 -->
-    <input type="range" min="0" max="800" value="0" step="1" 
-	   onChange="sliderChange(this.value)" />
-    <br /> <br />
-    
-    <!-- Label que indica el valor del slider -->
-    Radio = <span id="sliderStatus">0</span>
 
     
   </body>

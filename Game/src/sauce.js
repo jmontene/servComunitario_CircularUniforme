@@ -97,11 +97,3 @@ function onClick () {
 	button.setFrames(1,1,0);
     }
 }
-
-//Esta funcion lee el valor del slider
-function sliderChange(val){
-    dummyradio = val;
-    //Aqui se obtiene el valor del label que indica el valor del slider y se
-    //cambia
-    document.getElementById('sliderStatus').innerHTML = val;
-}

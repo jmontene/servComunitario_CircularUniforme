@@ -1,5 +1,6 @@
 Slider = function(game,min,max,jump,initValue) {
   this.game = game;
+  console.log(this.game);
   this.button = null;
   this.buttonID = null;
   this.slideID = null;
@@ -13,17 +14,20 @@ Slider = function(game,min,max,jump,initValue) {
 Slider.prototype = {
   
   preload: function(sID, sPath, bID, bPath) {
-    this.game.load.image(bID, bPath);
-    this.game.load.image(sID, sPath);
+    console.log(4);
+    if(sPath != 'noPath'){
+        this.game.load.image(bID, bPath);
+        this.game.load.image(sID, sPath);
+    }
     this.buttonID = bID;
     this.slideID = sID;
   },
   
   create: function(xCoord, yCoord, scaleX, scaleY) {
-    this.slide = game.add.sprite(xCoord,yCoord,this.slideID);
+    this.slide = this.game.add.sprite(xCoord,yCoord,this.slideID);
     this.slide.anchor.setTo(0,0.5);
     this.slide.scale.setTo(scaleX,scaleY);
-    this.button = game.add.sprite(xCoord,yCoord,this.buttonID);
+    this.button = this.game.add.sprite(xCoord,yCoord,this.buttonID);
     this.button.anchor.setTo(0.5,0.5);
     this.button.scale.setTo(scaleX,scaleY);
   },
