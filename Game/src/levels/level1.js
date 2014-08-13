@@ -29,6 +29,7 @@ Game.level1.prototype = {
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
 		ship = new Ally('ship',0.12,200,earth,this.game);
+		ship.sprite = this.game.add.sprite(earth.body.center.x,earth.body.center.y,'ship');
 		ship.sprite.anchor.setTo(0.5,0.5);
 		ship.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);

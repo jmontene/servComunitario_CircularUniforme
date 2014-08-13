@@ -13,12 +13,12 @@ Game.boot.prototype = {
 		this.load.image('ship', 'assets/sprites/nave.png');
 		this.load.image('title','assets/sprites/title.png');
 		this.load.spritesheet('button','assets/sprites/button_sprite1.png',64,64);
-		Slider.preload(this,'space');
+		//Slider.preload(this,'space');
 	},
 
 	create: function(){
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		this.state.start('menu');
+		this.game.state.start('menu');
 	}
 	
 }
@@ -29,11 +29,11 @@ Game.menu = function (game){
 Game.menu.prototype = {
 
 	create: function(){
-		title = this.add.sprite(this.game.world.centerX-200,this.game.world.centerY-200,'tittle');
+		title = this.game.add.sprite(this.game.world.centerX-200,this.game.world.centerY-200,'title');
 		this.game.add.button(this.game.world.centerX-50,this.game.world.centerY-50,'button',this.start,this,1,1,0);
 	},
 
 	start: function(){
-		this.state.start('level1')
+		this.game.state.start('level1')
 	}
 }
