@@ -4,47 +4,72 @@ Slider = function(game,min,max,jump,initValue) {
   this.sprites =
 		{button:null,
 		slide:null,
+		monitor:null
 		};
 		
   this.value = initValue;
   this.maxValue = max;
   this.minValue = min;
+  this.text = null;
   this.jump = (min + jump - min) / (max - min);
 }
 
 Slider.prototype = {
   
-  create: function(xCoord, yCoord, scaleX, scaleY) {
+    create: function(xCoord, yCoord, scaleB, scaleS, scaleM, fontSize,type) {
   
-    this.sprites.slide = this.game.add.sprite(xCoord,yCoord,Slider.IDs.slide);
-    this.sprites.slide.anchor.setTo(0,0.5);
-    this.sprites.slide.scale.setTo(scaleX,scaleY);
-	 
-    this.sprites.button = this.game.add.sprite(xCoord,yCoord,Slider.IDs.button);
-    this.sprites.button.anchor.setTo(0.5,0.5);
-    this.sprites.button.scale.setTo(scaleX,scaleY);
-	 
-  },
+		this.sprites.slide = this.game.add.sprite(xCoord,yCoord,Slider.IDs.slide);
+		this.sprites.slide.anchor.setTo(0,0.5);
+		this.sprites.slide.scale.setTo(scaleS[0],scaleS[1]);
+		
+		this.sprites.monitor = this.game.add.sprite(xCoord+this.sprites.slide.width,yCoord,Slider.IDs.monitor);
+		this.sprites.monitor.anchor.setTo(0,0.5);
+		this.sprites.monitor.scale.setTo(scaleM[0],scaleM[1]); 
+		
+		this.sprites.button = this.game.add.sprite(xCoord,yCoord,Slider.IDs.button);
+		this.sprites.button.anchor.setTo(0.5,0.5);
+		this.sprites.button.scale.setTo(scaleB[0],scaleB[1]);
+		
+		this.text = this.game.add.text(xCoord+this.sprites.slide.width+this.sprites.monitor.width/2.2,yCoord + this.sprites.monitor.height/5,this.initValue,{
+			font: fontSize + 'px Arial',
+			fill: '#ffffff',
+			align: 'center'
+		});
+		
+	    this.text.anchor.setTo(0.6,0.5);
+
+	    this.type = this.game.add.text(
+		xCoord+this.sprites.slide.width+this.sprites.monitor.width/2.2,
+		yCoord - this.sprites.monitor.height/5,this.initValue,{
+		font: fontSize + 'px Arial',
+		fill: '#ffffff',
+		align: 'center'
+	    });
+	    
+	    this.type.anchor.setTo(0.6,0.5);
+	    this.type.setText(type);
+	},
   
-  update: function() {
-  
-    if(this.game.input.mousePointer.isDown){
-      if(Phaser.Rectangle.contains(new Phaser.Rectangle
+	update: function() {
+	
+		this.text.setText(this.value);
+	    
+		if(this.game.input.mousePointer.isDown){
+			if(Phaser.Rectangle.contains(new Phaser.Rectangle
 				(this.sprites.slide.x,this.sprites.button.y-
-				this.sprites.button.height/2,this.slide.width,this.button.height)
-			,this.game.input.x,this.game.input.y))
-		{
-			this.changeValue(this.minValue + (this.maxValue - this.minValue) * 
-				((this.game.input.x - this.sprites.slide.x)/this.slide.width));
-      }
-    }
+				this.sprites.button.height/2,this.sprites.slide.width,this.sprites.button.height)
+				,this.game.input.x,this.game.input.y))
+			{
+				this.changeValue(this.minValue + (this.maxValue - this.minValue) * 
+					((this.game.input.x - this.sprites.slide.x)/this.sprites.slide.width));
+			}
+		}
 	 
-    this.sprites.button.x = (this.value <= this.minValue) ? this.sprites.slide.x : 
-                    (this.value >= this.maxValue) ? 
-						  this.sprites.slide.x + this.sprites.slide.width : 
-                    this.sprites.slide.x + this.sprites.slide.width 
-						  * this.valueToPercent();
-  },
+		this.sprites.button.x = (this.value <= this.minValue) ? this.sprites.slide.x : 
+			(this.value >= this.maxValue) ? this.sprites.slide.x + this.sprites.slide.width : 
+			this.sprites.slide.x + this.sprites.slide.width * this.valueToPercent();
+			
+	},
   
   valueToPercent: function() {
     return (this.value - this.minValue) / (this.maxValue - this.minValue);
@@ -59,12 +84,16 @@ Slider.prototype = {
 
 Slider.IDs =
 	{button:'slider_button',
-	slide:'slider_slide'
+	slide:'slider_slide',
+	monitor:'slider_monitor'
 	}
 
 Slider.preload = function(game,folder){
+
 	var path = 'assets/sprites/slider/' + folder;
-	game.load.image(path + '/button.png', Slider.IDs.button);
-	game.load.image(path + '/slide.png', Slider.IDs.slide);
+	game.load.image(Slider.IDs.button,path + '/button.png');
+	game.load.image(Slider.IDs.slide, path + '/slide.png');
+	game.load.image(Slider.IDs.monitor,path + '/monitor.png');
+	
 }
 	

@@ -13,7 +13,7 @@ Game.boot.prototype = {
 		this.load.image('ship', 'assets/sprites/nave.png');
 		this.load.image('title','assets/sprites/title.png');
 		this.load.spritesheet('button','assets/sprites/button_sprite1.png',64,64);
-		//Slider.preload(this,'space');
+		Slider.preload(this,'space');
 	},
 
 	create: function(){

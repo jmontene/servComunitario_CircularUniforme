@@ -52,13 +52,13 @@ Ally.prototype = {
     },
 
     change_angle: function(val){
-	if(this.angle != val){
-	    this.angle = val;
+	if(this.inicial_angle != val){
+	    this.inicial_angle = val;
 	    this.sprite.body.x = 
-		(this.radius * Math.cos(this.angle + this.inicial_angle))
+		(this.radius * Math.cos(this.inicial_angle))
 		+ this.target.x-this.fix.x;
 	    this.sprite.body.y = 
-		(this.radius * Math.sin(this.angle + this.inicial_angle))
+		(this.radius * Math.sin(this.inicial_angle))
 		+ this.target.y-this.fix.y;
 	}
     },
@@ -86,16 +86,16 @@ Ally.prototype = {
 
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
-    result = ":("
-    console.log(result);
+    this.result = ":("
+    console.log(this.result);
     onClick();
-    this.state.start('menu')
 }
 
 function collide_ally(earth, enemy){
-    result = ":)"
-    console.log(result);
+    this.result = ":)"
+    console.log(this.result);
     onClick();
+    this.game.state.start(this.next)
 }
 
 //Se activa cuando se le da click al boton
