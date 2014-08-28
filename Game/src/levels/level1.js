@@ -21,7 +21,7 @@ Game.level1.prototype = {
 	earth.body.center.y = this.game.world.centerY
 	
 	//Crea los enemigos
-	enemy = new Enemy('enemy',50,50,5,earth,this.game);
+	enemy = new Enemy('enemy',50,400,5,earth,this.game);
 	enemy.sprite.anchor.setTo(0.5,0.5);
 	enemy.sprite.scale.setTo(0.25,0.25);
 	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -36,7 +36,7 @@ Game.level1.prototype = {
 	ship = new Ally('ship',400,450,0.12,1,earth,this.game);
 	ship.sprite.anchor.setTo(0.5,0.5);
 	ship.sprite.scale.setTo(0.05,0.05);
-	ship.sprite.scale.x *= -ship.dir;
+	ship.sprite.scale.x *= ship.dir;
 	this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);
 	ship.initialize();
 		

@@ -32,9 +32,6 @@ function Ally(img,x,y,angle,dir,target,game){
     var v0 = Phaser.Point.subtract(pinitial,target.body.center)
     var v1 = new Phaser.Point(0,0)
     this.inicial_angle = Phaser.Point.angle(v0,v1)
-    
-    // this.fix = new Phaser.Point(spdummy.body.center.x - target.body.center.x,
-    // 				spdummy.body.center.y - target.body.center.y)
 
     this.fix = null
     this.target = target;
@@ -42,46 +39,47 @@ function Ally(img,x,y,angle,dir,target,game){
 
 Ally.prototype = {
 
-    initialize: function(){
-	this.sprite.body.collideWorldBounds = true;
+	initialize: function(){
+		this.sprite.body.collideWorldBounds = true;
 	
-	this.fix = new Phaser.Point(
-	    this.sprite.body.center.x - this.target.body.x,
-	    this.sprite.body.center.y - this.target.body.y)
+		this.fix = new Phaser.Point(
+			this.sprite.body.center.x - this.target.body.x,
+			this.sprite.body.center.y - this.target.body.y
+		)
+	},
 
-    },
+	change_angle: function(val){
+		if(this.inicial_angle != val){
+			this.inicial_angle = val;
+			this.sprite.body.x = 
+			(this.radius * Math.cos(this.inicial_angle))
+			+ this.target.x-this.fix.x;
+			this.sprite.body.y = 
+			(this.radius * Math.sin(this.inicial_angle))
+			+ this.target.y-this.fix.y;
+		}
+	},
 
-    change_angle: function(val){
-	if(this.inicial_angle != val){
-	    this.inicial_angle = val;
-	    this.sprite.body.x = 
-		(this.radius * Math.cos(this.inicial_angle))
-		+ this.target.x-this.fix.x;
-	    this.sprite.body.y = 
-		(this.radius * Math.sin(this.inicial_angle))
-		+ this.target.y-this.fix.y;
-	}
-    },
-
-    change_radio: function(val){
-	if(this.radius != val){
-	    this.radius = val;
-	}
-    },
+	change_radio: function(val){
+		if(this.radius != val){
+			this.radius = val;
+		}
+	},
     
-    move: function(time){
-	var dummy_angle = (this.dir*this.angle*time) + this.inicial_angle;
+	move: function(time){
+		var dummy_angle = (this.dir*this.angle*time) + this.inicial_angle;
+		
+		this.sprite.body.x =
+		(this.radius * Math.cos(dummy_angle)) +
+		this.target.body.center.x-this.fix.x;
+		
+		this.sprite.body.y = -
+		(this.radius * Math.sin(dummy_angle)) +
+		this.target.body.center.y-this.fix.y;
 	
-	this.sprite.body.x =
-	    (this.radius * Math.cos(dummy_angle)) +
-	    this.target.body.center.x-this.fix.x;
-	this.sprite.body.y = 
-	    (this.radius * Math.sin(dummy_angle)) +
-	    this.target.body.center.y-this.fix.y;
-	
-	this.sprite.angle = Phaser.Math.radToDeg(dummy_angle)+90;
+		this.sprite.angle = -Phaser.Math.radToDeg(dummy_angle)+90;
 
-    }
+	}
 }
 
 //Definicion de las colisiones
