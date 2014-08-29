@@ -1,8 +1,15 @@
-*Elementos de entrada y salida de cada nivel
+*Elementos de entrada y salida
+
+*Menu inicial
+	+Primero, se debería hacer un preloader para cada parte del juego que use la
+	función preload. (Mas detalles abajo en la sección: "Antes de comenzar el
+	nivel")
+	+Por ahora solo se necesita un gráfico para el titulo y un botón de inicio.
+	De nuevo, esto recae en el departamento de arte
 
 *Antes de comenzar el nivel
 	+Hacer un preloader para cada nivel. Se puede hacer uno sencillo por porcentaje
-	o por barra. Phaser tiene las herramientas para hacerlo. Aqui hay un ejemplo:
+	o por barra. Phaser tiene las herramientas para hacerlo. Aquí hay un ejemplo:
 	https://github.com/EnclaveGames/Cyber-Orb/blob/gh-pages/src/Preloader.js
 
 *Comienzo del nivel
