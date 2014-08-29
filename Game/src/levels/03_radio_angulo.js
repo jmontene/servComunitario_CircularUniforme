@@ -1,12 +1,19 @@
+//Nivel de radio+angulo
 
-Game.level2 = function (game){
-    this.time = 0;
-    play = false;
-    this.result = "level2";
-    this.next = 'menu'
+Game.level3 = function (game){
+	this.time = 0;
+	play = false;
+	this.result = "level3";
+	this.next = 'menu';
+	this.sliders = {
+		radio : null,
+		angulo : null,
+		vel_angular : null,
+		acc_angular : null
+	};
 };
 
-Game.level2.prototype = {
+Game.level3.prototype = {
 
 	create: function (){
 	
@@ -20,7 +27,7 @@ Game.level2.prototype = {
 		earth.body.center.y = this.game.world.centerY
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',10,400,5,earth,this.game);
+		enemy = new Enemy('enemy',180,300,5,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);

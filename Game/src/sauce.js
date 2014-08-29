@@ -1,40 +1,46 @@
 //Definicion de la clase Enemy
-function Enemy(img,x,y,d,target,game){
-    this.sprite = game.add.sprite(x,y,img);
-    this.initial = new Phaser.Point(x,y);
-    this.dir =
-	Phaser.Point.normalize(Phaser.Point.subtract(target,this.initial));
-    this.d = d;
+function Enemy(img,angle,distance,speed,target,game){
+	var radAngle = Phaser.Math.degToRad(angle);
+	var xPos = target.body.x + distance * Math.cos(radAngle);
+	var yPos = target.body.y - distance * Math.sin(radAngle);
+
+	this.sprite = game.add.sprite(xPos,yPos,img);
+	this.sprite.anchor.setTo(0.5,0.5);
+	this.sprite.scale.setTo(0.25,0.25);
+	
+	this.initial = new Phaser.Point(xPos,yPos);
+	this.dir = Phaser.Point.normalize(Phaser.Point.subtract(target,this.initial));
+	this.speed = speed;
 }
 
 Enemy.prototype = {
 
-    reset: function(){
-	this.sprite.body.x = this.initial.x;
-	this.sprite.body.y = this.initial.y;
-    },
+	reset: function(){
+		this.sprite.body.x = this.initial.x;
+		this.sprite.body.y = this.initial.y;
+	},
 
-    move: function(){
-	this.sprite.body.x = this.sprite.body.x + this.dir.x*this.d;
-	this.sprite.body.y = this.sprite.body.y + this.dir.y*this.d;
-    }
+	move: function(){
+		this.sprite.body.x = this.sprite.body.x + this.dir.x*this.speed;
+		this.sprite.body.y = this.sprite.body.y + this.dir.y*this.speed;
+	}
 };
 
 //Definicion de la clase Ally
 function Ally(img,x,y,angle,dir,target,game){
-    var spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
-    this.sprite = spdummy;
-    this.angle = angle;
-    this.dir = dir;
-    
-    var pinitial = new Phaser.Point(x,y);
-    this.radius = Phaser.Point.distance(pinitial,target.body.center);
-    var v0 = Phaser.Point.subtract(pinitial,target.body.center)
-    var v1 = new Phaser.Point(0,0)
-    this.inicial_angle = Phaser.Point.angle(v0,v1)
-
-    this.fix = null
-    this.target = target;
+	var spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
+	this.sprite = spdummy;
+	this.angle = angle;
+	this.dir = dir;
+	
+	var pinitial = new Phaser.Point(x,y);
+	this.radius = Phaser.Point.distance(pinitial,target.body.center);
+	var v0 = Phaser.Point.subtract(pinitial,target.body.center)
+	var v1 = new Phaser.Point(0,0)
+	this.inicial_angle = Phaser.Point.angle(v0,v1)
+	
+	this.fix = null
+	this.target = target;
 };
 
 Ally.prototype = {
@@ -84,24 +90,22 @@ Ally.prototype = {
 
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
-    this.result = ":("
-    console.log(this.result);
-    onClick();
+	this.result = ":("
+	onClick();
 }
 
 function collide_ally(earth, enemy){
-    this.result = ":)"
-    console.log(this.result);
-    onClick();
-    this.game.state.start(this.next)
+	this.result = ":)"
+	onClick();
+	this.game.state.start(this.next);
 }
 
 //Se activa cuando se le da click al boton
 function onClick () {
-    play =! play;
-    if(play){
-	button.setFrames(0,0,1);
-    }else{
-	button.setFrames(1,1,0);
-    }
+	play =! play;
+	if(play){
+		button.setFrames(0,0,1);
+	}else{
+		button.setFrames(1,1,0);
+	}
 }

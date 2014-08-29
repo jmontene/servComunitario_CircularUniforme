@@ -34,6 +34,6 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('level1')
+		this.game.state.start('radio')
 	}
 }
