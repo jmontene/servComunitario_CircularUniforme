@@ -1,9 +1,11 @@
 //Nivel de radio+angulo
 
-Game.level3 = function (game){
+Game.radio_angulo = function (game){
 	this.time = 0;
 	play = false;
-	this.result = "level3";
+	this.counter = 0;
+	
+	this.result = "radio_angulo";
 	this.next = 'menu';
 	this.sliders = {
 		radio : null,
@@ -11,9 +13,16 @@ Game.level3 = function (game){
 		vel_angular : null,
 		acc_angular : null
 	};
+	
+	this.prev = {
+		radio : 0,
+		angulo : 0,
+		vel_angular : 0,
+		acc_angular : 0
+	}
 };
 
-Game.level3.prototype = {
+Game.radio_angulo.prototype = {
 
 	create: function (){
 	
@@ -44,26 +53,38 @@ Game.level3.prototype = {
 		this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);
 		ship.initialize();
 	
-		//Crear un slider
-		angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
-		angulo.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"φ");
+		//Crear sliders
+		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
+		this.sliders.angulo.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"φ");
+		this.prev.angulo = this.sliders.angulo.value;
+		
+		this.sliders.radio = new Slider(this.game,100,500,1,200);
+		this.sliders.radio.create(600,450,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"R");
+		this.prev.radio = this.sliders.radio.value;
 	},
 
 	update: function(){
-		angulo.update()
+		this.sliders.angulo.update();
+		this.sliders.radio.update();
 	
 		if(play){
 			this.time++;
-			enemy.move();
-			this.result = "..."
-			ship.change_angle(Phaser.Math.degToRad(angulo.value));
+			this.counter++;
+			this.result = "...";
+			ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+			ship.change_radio(this.sliders.radio.value);
+			if(this.counter >= 20){
+				ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
+				ship.change_radio(this.prev.radio);
+				onClick();
+			}
 		}else{
 			this.time = 0;
+			this.counter = 0;
 			enemy.reset();
 		}
 	
 		ship.move(0);
-		this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
 		this.game.physics.arcade.collide(ship.sprite, enemy.sprite, collide_ally, 
 		null, this);
 		this.game.debug.text(this.result,375,50);

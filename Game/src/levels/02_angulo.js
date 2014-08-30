@@ -4,7 +4,7 @@ Game.angulo = function (game){
 	this.time = 0;
 	play = false;
 	this.result = "angulo";
-	this.next = 'menu';
+	this.next = 'radio_angulo';
 	this.sliders = {
 		radio : null,
 		angulo : null,
