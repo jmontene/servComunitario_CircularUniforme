@@ -13,6 +13,7 @@ Game.radio_angulo = function (game){
 		vel_angular : null,
 		acc_angular : null
 	};
+	this.pop = null;
 	
 	this.prev = {
 		radio : 0,
@@ -20,6 +21,8 @@ Game.radio_angulo = function (game){
 		vel_angular : 0,
 		acc_angular : 0
 	}
+	
+	this.win = false;
 };
 
 Game.radio_angulo.prototype = {
@@ -61,9 +64,20 @@ Game.radio_angulo.prototype = {
 		this.sliders.radio = new Slider(this.game,100,500,1,200);
 		this.sliders.radio.create(600,450,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"R");
 		this.prev.radio = this.sliders.radio.value;
+		
+		//Crear el popup
+		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
+		var t = new Item('text',0,-50,"Has ganado!!",[
+			'40px Arial',
+			'#ffffff',
+			'center'
+			]);
+		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+		this.win = false;
 	},
 
 	update: function(){
+		//console.log(this.pop);
 		this.sliders.angulo.update();
 		this.sliders.radio.update();
 	
@@ -73,7 +87,7 @@ Game.radio_angulo.prototype = {
 			this.result = "...";
 			ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
 			ship.change_radio(this.sliders.radio.value);
-			if(this.counter >= 20){
+			if(this.counter >= 20 && !(this.win)){
 				ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
 				ship.change_radio(this.prev.radio);
 				onClick();
@@ -85,9 +99,15 @@ Game.radio_angulo.prototype = {
 		}
 	
 		ship.move(0);
-		this.game.physics.arcade.collide(ship.sprite, enemy.sprite, collide_ally, 
-		null, this);
+		
+		if(!(this.win)) 
+			this.game.physics.arcade.collide(ship.sprite, enemy.sprite, this.winner, null, this);
 		this.game.debug.text(this.result,375,50);
-   }
+   },
+	
+	winner : function(ship,enemy){
+		this.win = true;
+		collide_ally.call(this,ship,enemy);
+	}	
 
 }

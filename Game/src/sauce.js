@@ -95,9 +95,14 @@ function collide_earth(earth, enemy){
 }
 
 function collide_ally(earth, enemy){
+	console.log("collide_Ally was called");
 	this.result = ":)"
 	onClick();
-	this.game.state.start(this.next);
+	this.game.state.getCurrentState().pop.show();
+}
+
+function nextLevel(){
+	this.game.state.start(this.game.state.getCurrentState().next);
 }
 
 //Se activa cuando se le da click al boton

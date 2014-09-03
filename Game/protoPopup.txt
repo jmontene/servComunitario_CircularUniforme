@@ -1,0 +1,12 @@
+Prototipo de popup:
+
+Clase PopUp(img,x,y,xScale,yScale,itemList,game){
+	this.container = game.add.sprite(img,x,y);
+	this.group = createNewGroup(this.container);
+	this.container.scale.setTo(xScale,yScale);
+	for(i in itemList){
+		this.group.create(i.item,i.x,i.y);
+	}
+}
+
+//Next: Implementar esto y hacer un metodo general para popups de next level

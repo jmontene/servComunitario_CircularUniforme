@@ -11,6 +11,7 @@ Game.radio = function (game){
 		vel_angular : null,
 		acc_angular : null
 	}
+	this.pop = null;
 };
 
 Game.radio.prototype = {
@@ -47,6 +48,15 @@ Game.radio.prototype = {
 		//Crear un slider
 		this.sliders.radio = new Slider(this.game,105,286,1,ship.radius);
 		this.sliders.radio.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"R");
+		
+		//Crear el popup
+		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
+		var t = new Item('text',0,-50,"Has ganado!!",[
+			'40px Arial',
+			'#ffffff',
+			'center'
+			]);
+		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
    },
 
 	update: function(){
@@ -70,4 +80,4 @@ Game.radio.prototype = {
 		this.game.debug.text(this.result,375,50);
 	}
 
-	}
+}

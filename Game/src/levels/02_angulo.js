@@ -11,6 +11,7 @@ Game.angulo = function (game){
 		vel_angular : null,
 		acc_angular : null
 	}
+	this.pop = null;
 };
 
 Game.angulo.prototype = {
@@ -47,6 +48,15 @@ Game.angulo.prototype = {
 		//Crear un slider
 		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
 		this.sliders.angulo.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"φ");
+		
+		//Crear el popup
+		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
+		var t = new Item('text',0,-50,"Has ganado!!",[
+			'40px Arial',
+			'#ffffff',
+			'center'
+			]);
+		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
 	},
 
 	update: function(){

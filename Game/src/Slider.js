@@ -36,18 +36,18 @@ Slider.prototype = {
 			align: 'center'
 		});
 		
-	    this.text.anchor.setTo(0.6,0.5);
+		this.text.anchor.setTo(0.6,0.5);
 
-	    this.type = this.game.add.text(
-		xCoord+this.sprites.slide.width+this.sprites.monitor.width/2.2,
-		yCoord - this.sprites.monitor.height/5,this.initValue,{
-		font: fontSize + 'px Arial',
-		fill: '#ffffff',
-		align: 'center'
-	    });
+	   this.type = this.game.add.text(
+			xCoord+this.sprites.slide.width+this.sprites.monitor.width/2.2,
+			yCoord - this.sprites.monitor.height/5,this.initValue,{
+				font: fontSize + 'px Arial',
+				fill: '#ffffff',
+				align: 'center'
+			});
 	    
-	    this.type.anchor.setTo(0.6,0.5);
-	    this.type.setText(type);
+		this.type.anchor.setTo(0.6,0.5);
+	   this.type.setText(type);
 	},
   
 	update: function() {
