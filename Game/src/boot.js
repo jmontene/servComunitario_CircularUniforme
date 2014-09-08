@@ -7,19 +7,12 @@ Game.boot = function (game){
 Game.boot.prototype = {
 
 	preload: function(){
-		this.load.image('earth', 'assets/sprites/tierra.png');
-		this.load.image('enemy', 'assets/sprites/asteroid.png');
-		this.load.spritesheet('execute','assets/sprites/executeSheet.png',1078,964);
-		this.load.image('ship', 'assets/sprites/nave.png');
-		this.load.image('title','assets/sprites/title.png');
-		this.load.image('panel','assets/sprites/panel.png');
-		this.load.spritesheet('button','assets/sprites/button_sprite1.png',64,64);
-		Slider.preload(this,'space');
+		this.load.image('preloadBar','assets/sprites/preloader_bar.png');
 	},
 
 	create: function(){
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		this.game.state.start('menu');
+		this.game.state.start('preloader');
 	}
 	
 }

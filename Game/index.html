@@ -24,6 +24,7 @@
 
     <!-- Definicion de los states del juego -->
     <script type="text/javascript" src="src/boot.js"></script>
+	 <script type="text/javascript" src="src/preloader.js"></script>
     <script type="text/javascript" src="src/levels/01_radio.js"></script>
     <script type="text/javascript" src="src/levels/02_angulo.js"></script>
 	 <script type="text/javascript" src="src/levels/03_radio_angulo.js"></script>
@@ -48,6 +49,7 @@
 
       game.state.add('menu', Game.menu);
       game.state.add('boot', Game.boot);
+		game.state.add('preloader',Game.preloader);
 
       // Se comienza el state boot
       game.state.start('boot');
