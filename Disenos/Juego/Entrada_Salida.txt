@@ -1,0 +1,29 @@
+*Elementos de entrada y salida
+
+*Menu inicial
+	+Primero, se debería hacer un preloader para cada parte del juego que use la
+	función preload. (Mas detalles abajo en la sección: "Antes de comenzar el
+	nivel")
+	+Por ahora solo se necesita un gráfico para el titulo y un botón de inicio.
+	De nuevo, esto recae en el departamento de arte
+
+*Antes de comenzar el nivel
+	+Hacer un preloader para cada nivel. Se puede hacer uno sencillo por porcentaje
+	o por barra. Phaser tiene las herramientas para hacerlo. Aquí hay un ejemplo:
+	https://github.com/EnclaveGames/Cyber-Orb/blob/gh-pages/src/Preloader.js
+
+*Comienzo del nivel
+	+Mostrar el nombre del nivel. Esto ya se hace
+	
+*Fin del nivel
+	+Mostrar el status de victoria/derrota. Esto ya se hace con texto (aunque
+	debería ser diferente de ":)" o ":(" XD)
+	+También seria bueno tener animaciones que avisen al jugador si gano o perdió.
+	Estas animaciones dependen de que arte le vamos a poner a cada tipo de nivel.
+	+Para el nivel del angulo se me ocurren:
+		-Que el meteorito explote en la tierra si la toca
+		-Que la nave active su escudo si detiene al meteorito (y que el meteorito
+		explote)
+	+Colocar un mensaje (pop-up?) al finalizar todo de "retry" o "siguiente", 
+	dependiendo del caso, para que el paso de niveles no sea tan violento
+	

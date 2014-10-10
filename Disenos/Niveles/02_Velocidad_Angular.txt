@@ -1,0 +1,10 @@
+Nivel de sólo modificar velocidad angular
+
+*Este nivel podría consistir en modificar la velocidad angular de una nave de 
+tal forma que ésta tenga suficiente como para llegar a un punto de su órbita en
+un tiempo determinado. Los enemigos tendrían marcados los tiempos en los que
+llegarán a la órbita actual de la nave y el estudiante tendría que calcular la
+velocidad angular necesaria para llegar a este punto en ese tiempo con la siguiente
+fórmula:
+
+angulo = vel.Angular * tiempo 

@@ -1,0 +1,4 @@
+Nivel en el que solo se modifica el radio
+
+*Los niveles en los que solo se modifica el radio podrían consistir en una nave,
+idealmente de diseño muy básico con respecto a la de 

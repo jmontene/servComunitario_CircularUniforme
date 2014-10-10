@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title> Prototype </title>
+
+    <script type="text/javascript" src="js/phaser.js"></script>
+    <script type="text/javascript" src="src/Slider.js"></script>
+    
+    <style type="text/css">
+      body {
+      margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      window.onload = function() {
+      
+      var game = new Phaser.Game(800,600,Phaser.AUTO,'gameContainer',{preload : preload, create : create, update : update});
+		
+		function preload(){
+		
+			Slider.preload(game,'space');
+			
+		}
+		
+		function create(){
+			
+			s = new Slider(game,0,360,1,0);
+			s.create(100,100,[0.03,0.03],[0.2,0.2],[0.2,0.2],35);
+			
+		}
+		
+		function update(){
+			
+			s.update();
+			
+		}
+		
+		
+
+      };
+    </script>
+
+    
+  </body>
+</html>

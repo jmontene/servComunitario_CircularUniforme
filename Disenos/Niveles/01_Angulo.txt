@@ -1,0 +1,6 @@
+Nivel de solo modificar angulo
+
+*Objetivo: Que el estudiante aprenda a asociar un angulo a una posición. Para esto,
+el slider no puede modificar la posición de la nave en tiempo real. En cambio,
+al modificar el slider, se cambia el valor pero solo se actualiza la posición al 
+presionar play 

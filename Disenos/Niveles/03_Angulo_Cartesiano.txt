@@ -1,0 +1,16 @@
+Nivel de angulo con grid cartesiano
+
+*Este nivel sería igual al del angulo, sólo que en lugar de órbitas solo hay un
+grid cartesiano en el nivel. El objetivo es que el estudiante asocie al radio
+fijo y al angulo con una posición en el plano.
+
+*El estudiante calcularía el angulo necesario en la formula (r*cos(t),r*sin(t)),
+donde el ángulo es t, para conseguir una posición necesaria
+
+*En cuanto a gráficas, se puede diferenciar este nivel del nivel de angulo con
+órbitas usando un objeto similar al del nivel del ángulo, pero con diferencias
+de color o forma. La animación de teletransportación en este caso podría ser
+distinto para aclarar aún mas la diferencia en la interpretación de los datos
+
+*Opcionalmente, se podrían tener niveles de órbita y grid que requieran el mismo
+ángulo para mostrar la equivalencia
