@@ -73,7 +73,18 @@ Game.radio_angulo.prototype = {
 			'center'
 			]);
 		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
-		this.win = false;
+	    this.win = false;
+
+            this.timeText = this.game.add.text(
+	    10,10,"0",{
+		font: '20px Arial',
+		fill: '#FFFFFF',
+		align: 'center'
+	    });
+
+	    console.log("Time: %f",this.time);
+
+            
 	},
 
 	update: function(){
@@ -97,7 +108,8 @@ Game.radio_angulo.prototype = {
 			this.counter = 0;
 			enemy.reset();
 		}
-	
+	    this.updateTime();
+
 		ship.move(0);
 		
 		if(!(this.win)) 
@@ -108,6 +120,19 @@ Game.radio_angulo.prototype = {
 	winner : function(ship,enemy){
 		this.win = true;
 		collide_ally.call(this,ship,enemy);
-	}	
+	},	
+        updateTime: function (){
+        seconds = Math.floor((this.time) / 60);
+        milliseconds = Math.floor(this.time)%60;
+
+        if (milliseconds < 10)
+            milliseconds = '0' + milliseconds;
+	
+        if (seconds < 10)
+            seconds = '0' + seconds;
+	
+        this.timeText.setText(seconds + ':' + milliseconds);
+    }
+
 
 }

@@ -28,17 +28,17 @@ Game.radio.prototype = {
 		earth.body.center.y = this.game.world.centerY
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',180,300,5,earth,this.game);
+		enemy = new Enemy('enemy',180,300,2,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
-
+ 
 		button = this.game.add.button(375,500,'button',onClick,this,1,1,0);
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
-		ship = new Ally('ship',400,450,0.12,1,earth,this.game);
+	    ship = new Ally('ship',400,450,0.5,1,earth,this.game);
 		ship.sprite.anchor.setTo(0.5,0.5);
 		ship.sprite.scale.setTo(0.05,0.05);
 		ship.sprite.scale.x *= ship.dir;
@@ -56,7 +56,18 @@ Game.radio.prototype = {
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+	    this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+
+            //Crea el tiempo
+            this.timeText = this.game.add.text(
+	    10,10,"0",{
+		font: '20px Arial',
+		fill: '#FFFFFF',
+		align: 'center'
+	    });
+
+	console.log("Time: %f",this.time);
+
    },
 
 	update: function(){
@@ -72,12 +83,26 @@ Game.radio.prototype = {
 			enemy.reset();
 			ship.change_radio(dummyradio);
 		}
-	
-		ship.move(this.time);
-		this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
-		this.game.physics.arcade.collide(ship.sprite, enemy.sprite, collide_ally, 
-			null, this);
-		this.game.debug.text(this.result,375,50);
-	}
+            
+	    ship.move(this.time);
+            this.updateTime();
+                      
+	    this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
+	    this.game.physics.arcade.collide(ship.sprite, enemy.sprite, collide_ally, 
+			                     null, this);
+	    this.game.debug.text(this.result,375,50);
+	},
 
+    updateTime: function (){
+        seconds = Math.floor((this.time) / 60);
+        milliseconds = Math.floor(this.time)%60;
+
+        if (milliseconds < 10)
+            milliseconds = '0' + milliseconds;
+	
+        if (seconds < 10)
+            seconds = '0' + seconds;
+	
+        this.timeText.setText(seconds + ':' + milliseconds);
+    }
 }

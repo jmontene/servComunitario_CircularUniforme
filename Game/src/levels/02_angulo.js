@@ -56,7 +56,16 @@ Game.angulo.prototype = {
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+	    this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+            this.timeText = this.game.add.text(
+	    10,10,"0",{
+		font: '20px Arial',
+		fill: '#FFFFFF',
+		align: 'center'
+	    });
+
+	    console.log("Time: %f",this.time);
+
 	},
 
 	update: function(){
@@ -71,12 +80,26 @@ Game.angulo.prototype = {
 			this.time = 0;
 			enemy.reset();
 		}
-	
+	    this.updateTime();
+
 		ship.move(0);
 		this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
 		this.game.physics.arcade.collide(ship.sprite, enemy.sprite, collide_ally, 
 		null, this);
 		this.game.debug.text(this.result,375,50);
-   }
+        },
+        updateTime: function (){
+        seconds = Math.floor((this.time) / 60);
+        milliseconds = Math.floor(this.time)%60;
+
+        if (milliseconds < 10)
+            milliseconds = '0' + milliseconds;
+	
+        if (seconds < 10)
+            seconds = '0' + seconds;
+	
+        this.timeText.setText(seconds + ':' + milliseconds);
+    }
+
 
 }

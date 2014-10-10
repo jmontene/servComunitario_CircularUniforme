@@ -73,7 +73,7 @@ Ally.prototype = {
 	},
     
 	move: function(time){
-		var dummy_angle = (this.dir*this.angle*time) + this.inicial_angle;
+	    var dummy_angle = (this.dir*this.angle*(time/10)) + this.inicial_angle;
 		
 		this.sprite.body.x =
 		(this.radius * Math.cos(dummy_angle)) +
@@ -114,3 +114,4 @@ function onClick () {
 		button.setFrames(1,1,0);
 	}
 }
+
