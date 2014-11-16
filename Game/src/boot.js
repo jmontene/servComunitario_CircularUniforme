@@ -1,6 +1,13 @@
 
 //El state Boot, es el primero que se corre y carga las imagenes
 
+timer = new Date();
+s = timer.getSeconds().toString();
+m = timer.getMinutes().toString();
+h = timer.getHours().toString();
+generator = new Phaser.RandomDataGenerator([s,m,h]);
+success = 0;
+
 Game.boot = function (game){
 };
 
@@ -28,6 +35,6 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('radio')
+		this.game.state.start('angulo')
 	}
 }

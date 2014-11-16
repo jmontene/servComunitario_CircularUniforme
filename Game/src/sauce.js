@@ -90,19 +90,27 @@ Ally.prototype = {
 
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
-	this.result = ":("
+	this.result = "Impacto. Intenta de Nuevo"
 	onClick();
 }
 
 function collide_ally(earth, enemy){
 	console.log("collide_Ally was called");
-	this.result = ":)"
+	this.result = "Lo has logrado!"
 	onClick();
 	this.game.state.getCurrentState().pop.show();
 }
 
 function nextLevel(){
-	this.game.state.start(this.game.state.getCurrentState().next);
+   state = this.game.state.getCurrentState();
+   success += 1;
+   if(success != state.neededTries){
+      state.curNext = state.name;
+   }else{
+      success = 0;
+      state.curNext = state.next;
+   }
+	this.game.state.start(this.game.state.getCurrentState().curNext);
 }
 
 //Se activa cuando se le da click al boton
