@@ -1,15 +1,15 @@
 //Definicion de la clase Enemy
 function Enemy(img,angle,distance,speed,target,game){
+   this.game = game;
 	var radAngle = Phaser.Math.degToRad(angle);
 	var xPos = target.body.x + distance * Math.cos(radAngle);
 	var yPos = target.body.y - distance * Math.sin(radAngle);
 
 	this.sprite = game.add.sprite(xPos,yPos,img);
 	this.sprite.anchor.setTo(0.5,0.5);
-	this.sprite.scale.setTo(0.25,0.25);
-	
 	this.initial = new Phaser.Point(xPos,yPos);
-	this.dir = Phaser.Point.normalize(Phaser.Point.subtract(target,this.initial));
+   this.dir = Phaser.Point.normalize(Phaser.Point.subtract(target,this.initial));
+
 	this.speed = speed;
 }
 
@@ -21,9 +21,13 @@ Enemy.prototype = {
 	},
 
 	move: function(){
-		this.sprite.body.x = this.sprite.body.x + this.dir.x*this.speed;
-		this.sprite.body.y = this.sprite.body.y + this.dir.y*this.speed;
-	}
+		this.game.physics.arcade.moveToObject(this.sprite,this.target,this.speed);
+	},
+   
+   change_angle: function(val){
+      this.sprite.angle = -val+90;
+   },
+   
 };
 
 //Definicion de la clase Ally
@@ -87,6 +91,7 @@ Ally.prototype = {
 
 	}
 }
+   
 
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
