@@ -37,8 +37,8 @@ Game.angulo.prototype = {
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
       var prevImg = "";
-      if(this.preview) prevImg = 'ship';
-		prev = new Ally(prevImg,420,300,0.12,-1,earth,this.game);
+      if(this.preview) prevImg = 'missileprev';
+		prev = new Ally(prevImg,400,300,0.12,-1,earth,this.game);
 		prev.sprite.anchor.setTo(0.5,0.5);
       prev.sprite.scale.setTo(0.05,0.05);
 		prev.sprite.scale.x *= -prev.dir;
@@ -55,7 +55,7 @@ Game.angulo.prototype = {
       
       //Crear el misil
       missile = new Enemy('missile',90,20,80,earth,this.game);
-      missile.sprite.scale.setTo(0.1,0.1);
+      missile.sprite.scale.setTo(0.05,0.05);
       this.game.physics.enable(missile.sprite,Phaser.Physics.ARCADE);
       earth.bringToTop();
 	
@@ -75,11 +75,12 @@ Game.angulo.prototype = {
       
       //Crear el texto del angulo
       this.angleText = this.game.add.text(
-         earth.x-25,earth.y+50,'',{
-         font: '30px Arial',
-         fill: '#000000',
-         align: 'center'
-      });
+          earth.x-25,earth.y+50,'',{
+              font: '30px Arial',
+              fill: '#000000',
+              align: 'center'
+          });
+
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
@@ -101,31 +102,33 @@ Game.angulo.prototype = {
 	    console.log("Time: %f",this.time);
 	},
 
-	update: function(){
-		this.sliders.angulo.update();
-      missile.change_angle(this.sliders.angulo.value);
-	
-		if(play){
-			this.time++;
-         this.angleText.setText(this.sliders.angulo.value + '°');
-         this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
-         this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
-			this.result = "..."
-		}else{
-			this.time = 0;
-			enemy.reset();
-         missile.reset();
-         mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-         prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-		}
-	    this.updateTime();
+    update: function(){
+	this.sliders.angulo.update();
 
-		prev.move(0);
-      mTarget.move(0);
-		this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
-		this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
-		null, this);
-		this.game.debug.text(this.result,400,50);
+	this.angleText.setText(this.sliders.angulo.value + '°');
+
+	if(play){
+	    this.time++;
+            this.angleText.setText(this.sliders.angulo.value + '°');
+            this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
+            this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
+	    this.result = "..."
+	}else{
+            missile.change_angle(this.sliders.angulo.value);
+	    this.time = 0;
+	    enemy.reset();
+            missile.reset();
+            mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+            prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+	}
+	this.updateTime();
+
+	prev.move(0);
+        mTarget.move(0);
+	this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
+	this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
+		                         null, this);
+	this.game.debug.text(this.result,400,50);
         },
         updateTime: function (){
         seconds = Math.floor((this.time) / 60);
