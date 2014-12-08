@@ -32,8 +32,7 @@ Enemy.prototype = {
 
 //Definicion de la clase Ally
 function Ally(img,x,y,angle,dir,target,game){
-	var spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
-	this.sprite = spdummy;
+	this.sprite = game.add.sprite(target.body.center.x,target.body.center.y,img);
 	this.angle = angle;
 	this.dir = dir;
 	

@@ -108,18 +108,18 @@ Game.angulo.prototype = {
 	this.angleText.setText(this.sliders.angulo.value + '°');
 
 	if(play){
-	    this.time++;
-            this.angleText.setText(this.sliders.angulo.value + '°');
-            this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
-            this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
-	    this.result = "..."
+      this.time++;
+      this.angleText.setText(this.sliders.angulo.value + '°');
+      this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
+      this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
+      this.result = "..."
 	}else{
-            missile.change_angle(this.sliders.angulo.value);
-	    this.time = 0;
-	    enemy.reset();
-            missile.reset();
-            mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-            prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      missile.change_angle(this.sliders.angulo.value);
+      this.time = 0;
+      enemy.reset();
+      missile.reset();
+      mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
 	}
 	this.updateTime();
 
@@ -129,8 +129,10 @@ Game.angulo.prototype = {
 	this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
 		                         null, this);
 	this.game.debug.text(this.result,400,50);
-        },
-        updateTime: function (){
+        
+   },
+        
+   updateTime: function (){
         seconds = Math.floor((this.time) / 60);
         milliseconds = Math.floor(this.time)%60;
 

@@ -5,8 +5,9 @@ Game.radio_angulo = function (game){
 	play = false;
 	this.counter = 0;
 	
-	this.result = "radio_angulo";
+	this.result = "Llega hasta el objetivo";
 	this.next = 'menu';
+   this.curNext = 'angulo_radio';
 	this.sliders = {
 		radio : null,
 		angulo : null,
@@ -21,7 +22,8 @@ Game.radio_angulo = function (game){
 		vel_angular : 0,
 		acc_angular : 0
 	}
-	
+   
+   this.neededTries = 5;
 	this.win = false;
 };
 
@@ -37,15 +39,23 @@ Game.radio_angulo.prototype = {
 		earth.body.immovable = true;
 		earth.body.center.x = this.game.world.centerX
 		earth.body.center.y = this.game.world.centerY
+      
+      //Target del misil
+		mTarget = new Ally('enemy',this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
+		mTarget.sprite.anchor.setTo(0.5,0.5);
+      mTarget.sprite.scale.setTo(0.5,0.5);
+		mTarget.sprite.scale.x *= -mTarget.dir;
+		this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
+		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',180,300,5,earth,this.game);
+		enemy = new Enemy('enemy',generator.angle(),400,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 
-		button = this.game.add.button(375,500,'button',onClick,this,1,1,0);
+		button = this.game.add.button(475,730,'button',onClick,this,1,1,0); 
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
@@ -58,11 +68,11 @@ Game.radio_angulo.prototype = {
 	
 		//Crear sliders
 		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
-		this.sliders.angulo.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"φ");
+		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ");
 		this.prev.angulo = this.sliders.angulo.value;
 		
 		this.sliders.radio = new Slider(this.game,100,500,1,200);
-		this.sliders.radio.create(600,450,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"R");
+		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R");
 		this.prev.radio = this.sliders.radio.value;
 		
 		//Crear el popup
@@ -83,56 +93,51 @@ Game.radio_angulo.prototype = {
 	    });
 
 	    console.log("Time: %f",this.time);
+       	ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+			ship.change_radio(this.sliders.radio.value);
 
             
 	},
 
 	update: function(){
-		//console.log(this.pop);
 		this.sliders.angulo.update();
 		this.sliders.radio.update();
+      
+      mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      mTarget.change_radio(this.sliders.radio.value + 90);
+      mTarget.move(0);
 	
 		if(play){
 			this.time++;
-			this.counter++;
 			this.result = "...";
-			ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-			ship.change_radio(this.sliders.radio.value);
-			if(this.counter >= 20 && !(this.win)){
-				ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
-				ship.change_radio(this.prev.radio);
-				onClick();
-			}
+         this.game.physics.arcade.moveToObject(ship.sprite,mTarget.sprite,90);
+         this.game.physics.arcade.collide(ship.sprite, mTarget.sprite,collide_earth, null, this);
 		}else{
 			this.time = 0;
-			this.counter = 0;
 			enemy.reset();
+         ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
+			ship.change_radio(this.prev.radio);
+         ship.move(0);
 		}
-	    this.updateTime();
-
-		ship.move(0);
-		
-		if(!(this.win)) 
-			this.game.physics.arcade.collide(ship.sprite, enemy.sprite, this.winner, null, this);
+      
+      this.updateTime();
+		 
+      this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
+      
 		this.game.debug.text(this.result,375,50);
    },
-	
-	winner : function(ship,enemy){
-		this.win = true;
-		collide_ally.call(this,ship,enemy);
-	},	
-        updateTime: function (){
-        seconds = Math.floor((this.time) / 60);
-        milliseconds = Math.floor(this.time)%60;
+   
+   updateTime: function (){
+      seconds = Math.floor((this.time) / 60);
+      milliseconds = Math.floor(this.time)%60;
 
-        if (milliseconds < 10)
-            milliseconds = '0' + milliseconds;
+      if (milliseconds < 10)
+         milliseconds = '0' + milliseconds;
 	
-        if (seconds < 10)
-            seconds = '0' + seconds;
+      if (seconds < 10)
+         seconds = '0' + seconds;
 	
-        this.timeText.setText(seconds + ':' + milliseconds);
+      this.timeText.setText(seconds + ':' + milliseconds);
     }
-
 
 }
