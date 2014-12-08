@@ -5,7 +5,7 @@ Game.angulo = function (game){
 	play = false;
 	this.result = "Intercepta el meteorito";
    this.name = "angulo";
-	this.next = 'menu';
+	this.next = 'radio_angulo';
    this.curNext = 'angulo';
 	this.sliders = {
 		radio : null,

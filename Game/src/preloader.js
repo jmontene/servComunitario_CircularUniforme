@@ -27,6 +27,8 @@ Game.preloader.prototype = {
 		this.load.spritesheet('button','assets/sprites/button_sprite1.png',64,64);
       this.load.image('missile','assets/sprites/cohete.png');
       this.load.image('missileprev','assets/sprites/coheteprev.png');
+      this.load.image('aim','assets/sprites/aim.png');
+      this.load.image('satelite','assets/sprites/satelite.png');
             
 		Slider.preload(this,'space');
 		

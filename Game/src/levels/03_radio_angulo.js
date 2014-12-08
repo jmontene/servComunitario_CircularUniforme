@@ -4,10 +4,11 @@ Game.radio_angulo = function (game){
 	this.time = 0;
 	play = false;
 	this.counter = 0;
+   this.name = "radio_angulo";
 	
 	this.result = "Llega hasta el objetivo";
 	this.next = 'menu';
-   this.curNext = 'angulo_radio';
+   this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,
 		angulo : null,
@@ -24,7 +25,6 @@ Game.radio_angulo = function (game){
 	}
    
    this.neededTries = 5;
-	this.win = false;
 };
 
 Game.radio_angulo.prototype = {
@@ -41,21 +41,22 @@ Game.radio_angulo.prototype = {
 		earth.body.center.y = this.game.world.centerY
       
       //Target del misil
-		mTarget = new Ally('enemy',this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
+		mTarget = new Ally('aim',this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
 		mTarget.sprite.anchor.setTo(0.5,0.5);
-      mTarget.sprite.scale.setTo(0.5,0.5);
+      mTarget.sprite.scale.setTo(0.09,0.09);
 		mTarget.sprite.scale.x *= -mTarget.dir;
 		this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
 		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.angle(),400,10,earth,this.game);
+		enemy = new Enemy('satelite',generator.angle(),400,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 
 		button = this.game.add.button(475,730,'button',onClick,this,1,1,0); 
+      mTarget.sprite.bringToTop();
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
@@ -83,7 +84,6 @@ Game.radio_angulo.prototype = {
 			'center'
 			]);
 		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
-	    this.win = false;
 
             this.timeText = this.game.add.text(
 	    10,10,"0",{
@@ -96,6 +96,8 @@ Game.radio_angulo.prototype = {
        	ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
 			ship.change_radio(this.sliders.radio.value);
 
+      this.lost = false;
+      this.sTime = this.game.time.now;
             
 	},
 
@@ -107,15 +109,24 @@ Game.radio_angulo.prototype = {
       mTarget.change_radio(this.sliders.radio.value);
       mTarget.move(0);
 	
-		if(play){
+		if(play && !this.lost){
 			this.time++;
 			this.result = "...";
          ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
          ship.change_radio(this.sliders.radio.value);
          ship.move(0);
-         this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
-         this.game.physics.arcade.collide(ship.sprite, mTarget.sprite,collide_earth, null, this);
-         
+         var coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
+         if(!coll){
+            this.lost = true;
+            this.sTime = this.game.time.now;
+         }
+      }else if(this.lost){
+         //console.log(Phaser.Time.now);
+         //console.log(this.sTime);
+         if(this.game.time.now - this.sTime > 1000){
+            this.loseGame();
+            this.lost = false;
+         }
 		}else{
 			this.time = 0;
 			enemy.reset();
@@ -140,6 +151,11 @@ Game.radio_angulo.prototype = {
          seconds = '0' + seconds;
 	
       this.timeText.setText(seconds + ':' + milliseconds);
-    }
+    },
+    
+   loseGame: function(){
+      this.result = "No llegaste al objetivo. Intenta de nuevo";
+      onClick();
+   }
 
 }

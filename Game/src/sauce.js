@@ -107,6 +107,7 @@ function collide_ally(earth, enemy){
 
 function nextLevel(){
    state = this.game.state.getCurrentState();
+   console.log(state);
    success += 1;
    if(success != state.neededTries){
       state.curNext = state.name;
@@ -114,6 +115,7 @@ function nextLevel(){
       success = 0;
       state.curNext = state.next;
    }
+   console.log(this.game.state.getCurrentState());
 	this.game.state.start(this.game.state.getCurrentState().curNext);
 }
 
