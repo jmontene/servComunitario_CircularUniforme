@@ -104,14 +104,18 @@ Game.radio_angulo.prototype = {
 		this.sliders.radio.update();
       
       mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-      mTarget.change_radio(this.sliders.radio.value + 90);
+      mTarget.change_radio(this.sliders.radio.value);
       mTarget.move(0);
 	
 		if(play){
 			this.time++;
 			this.result = "...";
-         this.game.physics.arcade.moveToObject(ship.sprite,mTarget.sprite,90);
+         ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+         ship.change_radio(this.sliders.radio.value);
+         ship.move(0);
+         this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
          this.game.physics.arcade.collide(ship.sprite, mTarget.sprite,collide_earth, null, this);
+         
 		}else{
 			this.time = 0;
 			enemy.reset();
@@ -121,8 +125,6 @@ Game.radio_angulo.prototype = {
 		}
       
       this.updateTime();
-		 
-      this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
       
 		this.game.debug.text(this.result,375,50);
    },
