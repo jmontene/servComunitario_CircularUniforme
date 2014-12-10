@@ -35,6 +35,6 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('radio_angulo')
+		this.game.state.start('angulo')
 	}
 }

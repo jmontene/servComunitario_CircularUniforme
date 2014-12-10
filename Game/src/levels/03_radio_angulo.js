@@ -16,6 +16,8 @@ Game.radio_angulo = function (game){
 		acc_angular : null
 	};
 	this.pop = null;
+   
+   this.preview = true;
 	
 	this.prev = {
 		radio : 0,
@@ -30,6 +32,9 @@ Game.radio_angulo = function (game){
 Game.radio_angulo.prototype = {
 
 	create: function (){
+   
+      if(success < 2) this.preview = true;
+      else this.preview = false;
 	
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -41,7 +46,9 @@ Game.radio_angulo.prototype = {
 		earth.body.center.y = this.game.world.centerY
       
       //Target del misil
-		mTarget = new Ally('aim',this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
+      var targetImg = "";
+      if(this.preview) targetImg = 'aim';
+		mTarget = new Ally(targetImg,this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
 		mTarget.sprite.anchor.setTo(0.5,0.5);
       mTarget.sprite.scale.setTo(0.09,0.09);
 		mTarget.sprite.scale.x *= -mTarget.dir;
@@ -49,7 +56,7 @@ Game.radio_angulo.prototype = {
 		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('satelite',generator.angle(),400,10,earth,this.game);
+		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(100,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);

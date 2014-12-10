@@ -60,7 +60,7 @@ Game.angulo.prototype = {
       earth.bringToTop();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.angle(),400,10,earth,this.game);
+		enemy = new Enemy('enemy',generator.angle(),350,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -85,13 +85,17 @@ Game.angulo.prototype = {
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
       var text = "Has ganado!!"
-      if(success == 1) text = "Ahora intentalo sin\n el indicador del misil!";
+      var size = [35,20];
+      if(success == 1){
+         text = "Ahora intentalo sin\n el indicador del misil!";
+         size = [60,20];
+      }
 		var t = new Item('text',0,-50,text,[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-      this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+      this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
       this.timeText = this.game.add.text(
          10,10,"0",{
          font: '20px Arial',
