@@ -16,8 +16,7 @@ Game.preloader.prototype = {
 		});
 		
 		this.load.setPreloadSprite(this.preloadBar);
-		
-		this.load.image('preloadBar','assets/sprites/preloader_bar.png');
+      
 		this.load.image('earth', 'assets/sprites/tierra.png');
 		this.load.image('enemy', 'assets/sprites/asteroid.png');
 		this.load.spritesheet('execute','assets/sprites/executeSheet.png',1078,964);
