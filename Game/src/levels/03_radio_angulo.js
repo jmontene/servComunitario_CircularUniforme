@@ -85,12 +85,18 @@ Game.radio_angulo.prototype = {
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-		var t = new Item('text',0,-50,"Has ganado!!",[
+      var text = "Has ganado!!";
+      var size = [35,20];
+      if(success == 1){
+         text = "Ahora intentalo sin\n la retícula!"
+         size = [60,20]
+      }
+		var t = new Item('text',0,-50,text,[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
+		this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
 
             this.timeText = this.game.add.text(
 	    10,10,"0",{
