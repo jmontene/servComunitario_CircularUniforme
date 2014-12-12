@@ -56,23 +56,26 @@ Game.radio_angulo.prototype = {
 		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(100,300),10,earth,this.game);
+		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 
-		button = this.game.add.button(475,730,'button',onClick,this,1,1,0); 
+		button = this.game.add.button(475,730,'button',this.startGame,this,1,1,0); 
       mTarget.sprite.bringToTop();
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
-		ship = new Ally('ship',420,100,0.12,-1,earth,this.game);
+		ship = new Ally('shipSheet',420,100,0.12,-1,earth,this.game);
 		ship.sprite.anchor.setTo(0.5,0.5);
-		ship.sprite.scale.setTo(0.05,0.05);
+		ship.sprite.scale.setTo(0.1,0.1);
 		ship.sprite.scale.x *= -ship.dir;
 		this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);
 		ship.initialize();
+      ship.sprite.animations.add('teleport',[1,2,3]);
+      ship.sprite.animations.add('teleportBack',[3,2,1]);
+      ship.sprite.frame = 0;
 	
 		//Crear sliders
 		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
@@ -98,7 +101,7 @@ Game.radio_angulo.prototype = {
 			]);
 		this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
 
-            this.timeText = this.game.add.text(
+      this.timeText = this.game.add.text(
 	    10,10,"0",{
 		font: '20px Arial',
 		fill: '#FFFFFF',
@@ -109,7 +112,11 @@ Game.radio_angulo.prototype = {
        	ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
 			ship.change_radio(this.sliders.radio.value);
 
-      this.lost = false;
+      
+      this.gameState = "teleport";
+      this.coll = false;
+      this.win = false;
+      this.doGame = false;
       this.sTime = this.game.time.now;
             
 	},
@@ -122,25 +129,39 @@ Game.radio_angulo.prototype = {
       mTarget.change_radio(this.sliders.radio.value);
       mTarget.move(0);
 	
-		if(play && !this.lost){
+		if(this.doGame && !this.lost && !this.win){
 			this.time++;
 			this.result = "...";
-         ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-         ship.change_radio(this.sliders.radio.value);
-         ship.move(0);
-         var coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
-         if(!coll){
-            this.lost = true;
-            this.sTime = this.game.time.now;
+         if(this.gameState == "teleport"){
+            ship.sprite.animations.play('teleport');
+            this.gameState = "moveIn";
+         }else if(this.gameState == "moveIn" && ship.sprite.animations.getAnimation('teleport').isFinished){
+            ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+            ship.change_radio(this.sliders.radio.value);
+            ship.move(0);
+            this.gameState = "teleportBack";
+         }else if(this.gameState == "teleportBack"){
+            ship.sprite.animations.play('teleportBack');
+            this.gameState = "checkColl";
+         }else if(this.gameState == "checkColl" && ship.sprite.animations.getAnimation('teleportBack').isFinished){
+            ship.sprite.frame = 0;
+            if(!this.coll){
+               this.lost = true;
+               this.sTime = this.game.time.now;
+            }else{
+               this.win = true;
+               this.result = "Lo has logrado!";
+               this.game.state.getCurrentState().pop.show();
+            }
          }
       }else if(this.lost){
-         //console.log(Phaser.Time.now);
-         //console.log(this.sTime);
          if(this.game.time.now - this.sTime > 1000){
-            this.loseGame();
+            this.result = "No llegaste al objetivo. Intenta de nuevo";
             this.lost = false;
+            this.gameState = "teleport";
+            this.doGame = false;
          }
-		}else{
+		}else if(!this.win){
 			this.time = 0;
 			enemy.reset();
          ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
@@ -149,6 +170,10 @@ Game.radio_angulo.prototype = {
 		}
       
       this.updateTime();
+      
+      if(!this.coll){
+         this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,null, null, this);
+      }
       
 		this.game.debug.text(this.result,375,50);
    },
@@ -166,9 +191,7 @@ Game.radio_angulo.prototype = {
       this.timeText.setText(seconds + ':' + milliseconds);
     },
     
-   loseGame: function(){
-      this.result = "No llegaste al objetivo. Intenta de nuevo";
-      onClick();
+   startGame: function(){
+      this.doGame =! this.doGame;
    }
-
 }

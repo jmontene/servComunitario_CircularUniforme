@@ -20,6 +20,7 @@ Game.preloader.prototype = {
 		this.load.image('earth', 'assets/sprites/tierra.png');
 		this.load.image('enemy', 'assets/sprites/asteroid.png');
 		this.load.spritesheet('execute','assets/sprites/executeSheet.png',1078,964);
+      this.load.spritesheet('shipSheet','assets/sprites/naveSheet.png',587,587);
 		this.load.image('ship', 'assets/sprites/nave.png');
 		this.load.image('title','assets/sprites/title.png');
 		this.load.image('panel','assets/sprites/panel.png');
