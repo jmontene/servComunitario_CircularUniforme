@@ -6,7 +6,7 @@ Game.radio_angulo = function (game){
 	this.counter = 0;
    this.name = "radio_angulo";
 	
-	this.result = "Llega hasta el objetivo";
+	this.result = "Llega hasta el satélite";
 	this.next = 'menu';
    this.curNext = 'radio_angulo';
 	this.sliders = {
@@ -35,6 +35,11 @@ Game.radio_angulo.prototype = {
    
       if(success < 2) this.preview = true;
       else this.preview = false;
+      
+      //background
+      bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'background');
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
 	
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -58,7 +63,7 @@ Game.radio_angulo.prototype = {
 		//Crea los enemigos
 		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
-		enemy.sprite.scale.setTo(0.25,0.25);
+		enemy.sprite.scale.setTo(0.08,0.08);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 

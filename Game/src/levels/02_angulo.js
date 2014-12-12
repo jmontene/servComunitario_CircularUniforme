@@ -25,6 +25,11 @@ Game.angulo.prototype = {
       if(success < 2) this.preview = true;
       else this.preview = false;
       
+      //background
+      bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'background');
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
+      
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
 		earth.anchor.setTo(0.5,0.5);
