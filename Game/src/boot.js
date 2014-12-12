@@ -30,8 +30,12 @@ Game.menu = function (game){
 Game.menu.prototype = {
 
 	create: function(){
-		title = this.game.add.sprite(this.game.world.centerX-200,this.game.world.centerY-200,'title');
-		this.game.add.button(this.game.world.centerX-50,this.game.world.centerY-50,'button',this.start,this,1,1,0);
+		title = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'menuBackground');
+      title.scale.setTo(0.5,0.5);
+      title.anchor.setTo(0.5,0.5);
+		b = this.game.add.button(this.game.world.centerX+17,this.game.world.centerY-35,'menuButton',this.start,this,1,0,0);
+      b.anchor.setTo(0.5,0.5);
+      b.scale.setTo(0.5,0.5);
 	},
 
 	start: function(){
