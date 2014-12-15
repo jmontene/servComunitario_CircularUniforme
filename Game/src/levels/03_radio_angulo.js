@@ -7,7 +7,7 @@ Game.radio_angulo = function (game){
    this.name = "radio_angulo";
 	
 	this.result = "Llega hasta el satélite";
-	this.next = 'menu';
+	this.next = 'won';
    this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,
@@ -35,6 +35,14 @@ Game.radio_angulo.prototype = {
    
       if(success < 2) this.preview = true;
       else this.preview = false;
+      
+      this.popArgs = [
+         [35,20,"Has Ganado!!"],
+         [60,20,"Ahora intentalo sin\n la retícula!"],
+         [35,20,"Has Ganado!!"],
+         [35,20,"Has Ganado!!"],
+         [35,20,"Has Ganado!!"]
+      ];
       
       //background
       bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'background');
@@ -83,28 +91,23 @@ Game.radio_angulo.prototype = {
       ship.sprite.frame = 0;
 	
 		//Crear sliders
-		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
-		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ");
+		this.sliders.angulo = new Slider(this.game,0,359,1,0);
+		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
 		this.prev.angulo = this.sliders.angulo.value;
 		
-		this.sliders.radio = new Slider(this.game,100,500,1,200);
-		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R");
+		this.sliders.radio = new Slider(this.game,100,300,1,200);
+		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
 		this.prev.radio = this.sliders.radio.value;
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-      var text = "Has ganado!!";
-      var size = [35,20];
-      if(success == 1){
-         text = "Ahora intentalo sin\n la retícula!"
-         size = [60,20]
-      }
-		var t = new Item('text',0,-50,text,[
+      var curArgs = this.popArgs[success];
+		var t = new Item('text',0,-50,curArgs[2],[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
+		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
       this.timeText = this.game.add.text(
 	    10,10,"0",{
@@ -113,10 +116,18 @@ Game.radio_angulo.prototype = {
 		align: 'center'
 	    });
 
-	    console.log("Time: %f",this.time);
-       	ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-			ship.change_radio(this.sliders.radio.value);
-
+      ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      ship.change_radio(this.sliders.radio.value);
+      
+      this.resText = this.game.add.text(
+         430,20,this.result,{
+         font: '20px Arial',
+         fill: '#FFFFFF',
+         align: 'center'
+         }
+      );
+        
+      this.result = "Llega hasta el satélite";
       
       this.gameState = "teleport";
       this.coll = false;
@@ -180,7 +191,7 @@ Game.radio_angulo.prototype = {
          this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,null, null, this);
       }
       
-		this.game.debug.text(this.result,375,50);
+		this.resText.setText(this.result);
    },
    
    updateTime: function (){

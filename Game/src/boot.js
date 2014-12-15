@@ -39,6 +39,31 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('angulo')
+		this.game.state.start('radio_angulo');
 	}
+}
+
+Game.won = function (game){
+};
+
+Game.won.prototype = {
+
+   create: function(){
+      this.endText = this.game.add.text(
+         this.game.world.centerX,this.game.world.centerY-10,"Felicidades, has completado el juego!",{
+         font: '50px Arial',
+         fill: '#FFFFFF',
+         align: 'center'
+         }
+      );
+      this.endText.anchor.setTo(0.5,0.5);
+
+      this.endButton = this.game.add.button(this.game.world.centerX,this.game.world.centerY+80,'button',this.start,this,1,1,0);
+      this.endButton.anchor.setTo(0.5,0.5);
+   },
+   
+   start: function(){
+      this.game.state.start('menu');
+   }
+
 }
