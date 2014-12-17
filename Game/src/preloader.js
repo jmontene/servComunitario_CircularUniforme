@@ -18,13 +18,13 @@ Game.preloader.prototype = {
 		this.load.setPreloadSprite(this.preloadBar);
       
 		this.load.image('earth', 'assets/sprites/tierra.png');
-		this.load.image('enemy', 'assets/sprites/asteroid.png');
+		this.load.image('enemy', 'assets/sprites/Enemy.png');
 		this.load.spritesheet('execute','assets/sprites/executeSheet.png',1078,964);
       this.load.spritesheet('shipSheet','assets/sprites/naveSheet.png',587,587);
 		this.load.image('ship', 'assets/sprites/nave.png');
 		this.load.image('title','assets/sprites/title.png');
 		this.load.image('panel','assets/sprites/panel.png');
-		this.load.spritesheet('button','assets/sprites/button_sprite1.png',64,64);
+		this.load.spritesheet('button','assets/sprites/button_sheet.png',64,64);
       this.load.image('missile','assets/sprites/cohete.png');
       this.load.image('missileprev','assets/sprites/coheteprev.png');
       this.load.image('aim','assets/sprites/aim.png');
@@ -32,6 +32,8 @@ Game.preloader.prototype = {
       this.load.image('menuBackground','assets/sprites/menuBackground.png');
       this.load.spritesheet('menuButton','assets/sprites/menuButtonSheet.png',421,401);
       this.load.image('background','assets/sprites/background.png');
+        this.load.image('backgroundGridOn','assets/sprites/backgroundGridOn.png');
+        this.load.image('backgroundGridOff','assets/sprites/backgroundGridOff.png');
             
 		Slider.preload(this,'space');
 		

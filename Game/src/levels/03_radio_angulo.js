@@ -18,6 +18,7 @@ Game.radio_angulo = function (game){
 	this.pop = null;
    
    this.preview = true;
+   this.grid = true;
 	
 	this.prev = {
 		radio : 0,
@@ -26,7 +27,7 @@ Game.radio_angulo = function (game){
 		acc_angular : 0
 	}
    
-   this.neededTries = 5;
+   this.neededTries = 7;
 };
 
 Game.radio_angulo.prototype = {
@@ -35,17 +36,25 @@ Game.radio_angulo.prototype = {
    
       if(success < 2) this.preview = true;
       else this.preview = false;
+        
+      if(success < 4) this.grid = true;
+      else this.grid = false;
       
       this.popArgs = [
-         [35,20,"Has Ganado!!"],
-         [60,20,"Ahora intentalo sin\n la retícula!"],
-         [35,20,"Has Ganado!!"],
-         [35,20,"Has Ganado!!"],
-         [35,20,"Has Ganado!!"]
-      ];
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"]
+        ];
       
       //background
-      bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'background');
+        bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,  'backgroundGridOn');
+      
+        if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'backgroundGridOff');
+
       bg.anchor.setTo(0.5,0.5);
       bg.scale.setTo(0.55,0.55);
 	
@@ -71,7 +80,7 @@ Game.radio_angulo.prototype = {
 		//Crea los enemigos
 		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
-		enemy.sprite.scale.setTo(0.08,0.08);
+		enemy.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 

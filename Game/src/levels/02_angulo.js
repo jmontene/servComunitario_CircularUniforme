@@ -14,8 +14,9 @@ Game.angulo = function (game){
 		acc_angular : null
 	}
 	this.pop = null;
-   this.neededTries = 5;
+   this.neededTries = 7;
    this.preview = true;
+    this.grid = true;
 };
 
 Game.angulo.prototype = {
@@ -23,18 +24,26 @@ Game.angulo.prototype = {
 	create: function (){
    
       this.popArgs = [
-         [35,20,"Has Ganado!!"],
-         [60,20,"Ahora intentalo sin\n el indicador de misil!"],
-         [35,20,"Has Ganado!!"],
-         [35,20,"Has Ganado!!"],
-         [60,20,"Prepárate para el\n siguiente reto!!"]
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
    
       if(success < 2) this.preview = true;
       else this.preview = false;
+        
+      if(success < 4) this.grid = true;
+      else this.grid = false;
       
       //background
-      bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'background');
+       bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'backgroundGridOn');
+      
+       if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'backgroundGridOff');
+        
       bg.anchor.setTo(0.5,0.5);
       bg.scale.setTo(0.55,0.55);
       
