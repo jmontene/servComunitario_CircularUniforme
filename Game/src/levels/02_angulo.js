@@ -40,7 +40,7 @@ Game.angulo.prototype = {
       else this.grid = false;
       
       //background
-       bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'backgroundGridOn');
+       bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOn');
       
        if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-23,this.game.world.centerY+36,'backgroundGridOff');
         
