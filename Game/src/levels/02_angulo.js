@@ -14,16 +14,38 @@ Game.angulo = function (game){
 		acc_angular : null
 	}
 	this.pop = null;
-   this.neededTries = 5;
+   this.neededTries = 7;
    this.preview = true;
+    this.grid = true;
 };
 
 Game.angulo.prototype = {
 
 	create: function (){
    
+      this.popArgs = [
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "Prepárate para el\n siguiente reto!!"]
+      ];
+   
       if(success < 2) this.preview = true;
       else this.preview = false;
+        
+      if(success < 4) this.grid = true;
+      else this.grid = false;
+      
+      //background
+       bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOn');
+      
+       if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
+        
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
       
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -60,7 +82,7 @@ Game.angulo.prototype = {
       earth.bringToTop();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.angle(),350,10,earth,this.game);
+		enemy = new Enemy('enemy',generator.angle(),300,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -71,7 +93,7 @@ Game.angulo.prototype = {
 	
 		//Crear un slider
 		this.sliders.angulo = new Slider(this.game,0,359,1,0);
-		this.sliders.angulo.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ");
+		this.sliders.angulo.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
       
       //Crear el texto del angulo
       this.angleText = this.game.add.text(
@@ -84,70 +106,74 @@ Game.angulo.prototype = {
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-      var text = "Has ganado!!"
-      var size = [35,20];
-      if(success == 1){
-         text = "Ahora intentalo sin\n el indicador del misil!";
-         size = [60,20];
-      }
-		var t = new Item('text',0,-50,text,[
+      var curArgs = this.popArgs[success];
+      console.log(this.popArgs);
+		var t = new Item('text',0,-50,curArgs[2],[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-      this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
+      this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
       this.timeText = this.game.add.text(
          10,10,"0",{
          font: '20px Arial',
          fill: '#FFFFFF',
          align: 'center'
-         });
-         
-	    console.log("Time: %f",this.time);
+      });
+      
+      this.resText = this.game.add.text(
+         430,20,this.result,{
+         font: '20px Arial',
+         fill: '#FFFFFF',
+         align: 'center'
+         }
+      );
+        
+      this.result = "Intercepta el meteorito";
+	   console.log("Time: %f",this.time);
 	},
 
-    update: function(){
-	this.sliders.angulo.update();
+   update: function(){
+      this.sliders.angulo.update();
 
-	this.angleText.setText(this.sliders.angulo.value + '°');
-
-	if(play){
-      this.time++;
       this.angleText.setText(this.sliders.angulo.value + '°');
-      this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
-      this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
-      this.result = "..."
-	}else{
-      missile.change_angle(this.sliders.angulo.value);
-      this.time = 0;
-      enemy.reset();
-      missile.reset();
-      mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-      prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-	}
-	this.updateTime();
 
-	prev.move(0);
-        mTarget.move(0);
-	this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
-	this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
-		                         null, this);
-	this.game.debug.text(this.result,400,50);
-        
+      if(play){
+         this.time++;
+         this.angleText.setText(this.sliders.angulo.value + '°');
+         this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
+         this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
+         this.result = "..."
+      }else{
+         missile.change_angle(this.sliders.angulo.value);
+         this.time = 0;
+         enemy.reset();
+         missile.reset();
+         mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+         prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      }
+      this.updateTime();
+
+      prev.move(0);
+      mTarget.move(0);
+      this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
+      this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
+		null, this);
+      this.resText.setText(this.result);
    },
         
    updateTime: function (){
-        seconds = Math.floor((this.time) / 60);
-        milliseconds = Math.floor(this.time)%60;
+      seconds = Math.floor((this.time) / 60);
+      milliseconds = Math.floor(this.time)%60;
 
-        if (milliseconds < 10)
-            milliseconds = '0' + milliseconds;
+      if (milliseconds < 10)
+         milliseconds = '0' + milliseconds;
 	
-        if (seconds < 10)
-            seconds = '0' + seconds;
+      if (seconds < 10)
+         seconds = '0' + seconds;
 	
-        this.timeText.setText(seconds + ':' + milliseconds);
-    }
+      this.timeText.setText(seconds + ':' + milliseconds);
+   }
 
 
 }

@@ -6,8 +6,8 @@ Game.radio_angulo = function (game){
 	this.counter = 0;
    this.name = "radio_angulo";
 	
-	this.result = "Llega hasta el objetivo";
-	this.next = 'menu';
+	this.result = "Llega hasta el satélite";
+	this.next = 'won';
    this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,
@@ -18,6 +18,7 @@ Game.radio_angulo = function (game){
 	this.pop = null;
    
    this.preview = true;
+   this.grid = true;
 	
 	this.prev = {
 		radio : 0,
@@ -26,7 +27,7 @@ Game.radio_angulo = function (game){
 		acc_angular : 0
 	}
    
-   this.neededTries = 5;
+   this.neededTries = 7;
 };
 
 Game.radio_angulo.prototype = {
@@ -35,6 +36,27 @@ Game.radio_angulo.prototype = {
    
       if(success < 2) this.preview = true;
       else this.preview = false;
+        
+      if(success < 4) this.grid = true;
+      else this.grid = false;
+      
+      this.popArgs = [
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"]
+        ];
+      
+      //background
+        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,  'backgroundGridOn');
+      
+        if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
+
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
 	
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -56,60 +78,70 @@ Game.radio_angulo.prototype = {
 		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(100,300),10,earth,this.game);
+		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
-		enemy.sprite.scale.setTo(0.25,0.25);
+		enemy.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 
-		button = this.game.add.button(475,730,'button',onClick,this,1,1,0); 
+		button = this.game.add.button(475,730,'button',this.startGame,this,1,1,0); 
       mTarget.sprite.bringToTop();
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
-		ship = new Ally('ship',420,100,0.12,-1,earth,this.game);
+		ship = new Ally('shipSheet',420,100,0.12,-1,earth,this.game);
 		ship.sprite.anchor.setTo(0.5,0.5);
-		ship.sprite.scale.setTo(0.05,0.05);
+		ship.sprite.scale.setTo(0.1,0.1);
 		ship.sprite.scale.x *= -ship.dir;
 		this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);
 		ship.initialize();
+      ship.sprite.animations.add('teleport',[1,2,3]);
+      ship.sprite.animations.add('teleportBack',[3,2,1]);
+      ship.sprite.frame = 0;
 	
 		//Crear sliders
-		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
-		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ");
+		this.sliders.angulo = new Slider(this.game,0,359,1,0);
+		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
 		this.prev.angulo = this.sliders.angulo.value;
 		
-		this.sliders.radio = new Slider(this.game,100,500,1,200);
-		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R");
+		this.sliders.radio = new Slider(this.game,100,300,1,200);
+		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
 		this.prev.radio = this.sliders.radio.value;
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-      var text = "Has ganado!!";
-      var size = [35,20];
-      if(success == 1){
-         text = "Ahora intentalo sin\n la retícula!"
-         size = [60,20]
-      }
-		var t = new Item('text',0,-50,text,[
+      var curArgs = this.popArgs[success];
+		var t = new Item('text',0,-50,curArgs[2],[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,size[0],size[1],[but,t],this.game);
+		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
-            this.timeText = this.game.add.text(
+      this.timeText = this.game.add.text(
 	    10,10,"0",{
 		font: '20px Arial',
 		fill: '#FFFFFF',
 		align: 'center'
 	    });
 
-	    console.log("Time: %f",this.time);
-       	ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-			ship.change_radio(this.sliders.radio.value);
-
-      this.lost = false;
+      ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      ship.change_radio(this.sliders.radio.value);
+      
+      this.resText = this.game.add.text(
+         430,20,this.result,{
+         font: '20px Arial',
+         fill: '#FFFFFF',
+         align: 'center'
+         }
+      );
+        
+      this.result = "Llega hasta el satélite";
+      
+      this.gameState = "teleport";
+      this.coll = false;
+      this.win = false;
+      this.doGame = false;
       this.sTime = this.game.time.now;
             
 	},
@@ -122,25 +154,39 @@ Game.radio_angulo.prototype = {
       mTarget.change_radio(this.sliders.radio.value);
       mTarget.move(0);
 	
-		if(play && !this.lost){
+		if(this.doGame && !this.lost && !this.win){
 			this.time++;
 			this.result = "...";
-         ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-         ship.change_radio(this.sliders.radio.value);
-         ship.move(0);
-         var coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,collide_ally, null, this);
-         if(!coll){
-            this.lost = true;
-            this.sTime = this.game.time.now;
+         if(this.gameState == "teleport"){
+            ship.sprite.animations.play('teleport');
+            this.gameState = "moveIn";
+         }else if(this.gameState == "moveIn" && ship.sprite.animations.getAnimation('teleport').isFinished){
+            ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+            ship.change_radio(this.sliders.radio.value);
+            ship.move(0);
+            this.gameState = "teleportBack";
+         }else if(this.gameState == "teleportBack"){
+            ship.sprite.animations.play('teleportBack');
+            this.gameState = "checkColl";
+         }else if(this.gameState == "checkColl" && ship.sprite.animations.getAnimation('teleportBack').isFinished){
+            ship.sprite.frame = 0;
+            if(!this.coll){
+               this.lost = true;
+               this.sTime = this.game.time.now;
+            }else{
+               this.win = true;
+               this.result = "Lo has logrado!";
+               this.game.state.getCurrentState().pop.show();
+            }
          }
       }else if(this.lost){
-         //console.log(Phaser.Time.now);
-         //console.log(this.sTime);
          if(this.game.time.now - this.sTime > 1000){
-            this.loseGame();
+            this.result = "No llegaste al objetivo. Intenta de nuevo";
             this.lost = false;
+            this.gameState = "teleport";
+            this.doGame = false;
          }
-		}else{
+		}else if(!this.win){
 			this.time = 0;
 			enemy.reset();
          ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
@@ -150,7 +196,11 @@ Game.radio_angulo.prototype = {
       
       this.updateTime();
       
-		this.game.debug.text(this.result,375,50);
+      if(!this.coll){
+         this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,null, null, this);
+      }
+      
+		this.resText.setText(this.result);
    },
    
    updateTime: function (){
@@ -166,9 +216,7 @@ Game.radio_angulo.prototype = {
       this.timeText.setText(seconds + ':' + milliseconds);
     },
     
-   loseGame: function(){
-      this.result = "No llegaste al objetivo. Intenta de nuevo";
-      onClick();
+   startGame: function(){
+      this.doGame =! this.doGame;
    }
-
 }
