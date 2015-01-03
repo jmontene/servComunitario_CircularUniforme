@@ -88,7 +88,12 @@ Ally.prototype = {
 	
 		this.sprite.angle = -Phaser.Math.radToDeg(dummy_angle)+90;
 
-	}
+	},
+
+    getPosition: function(){
+        return new Phaser.Point(this.sprite.body.x -this.target.x+this.fix.x,
+                                this.target.y-this.fix.y-this.sprite.body.y)
+    }
 }
    
 
@@ -129,3 +134,28 @@ function onClick () {
 	}
 }
 
+function toRadian (state,pos) {
+    // var x = pos.x - state.game.world.centerX
+    // var y = state.game.world.centerY-pos.y
+
+    var x = pos.x
+    var y = pos.y
+    
+    var radio = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+    if(x<0)
+        var angle = Math.atan(y/x) + Math.PI
+    if(x==0 && y>0)
+        var angle = Math.PI/2
+    if(x==0 && y<0)
+        var angle = (3*Math.PI)/2
+    if(y>=0 && x>0)
+        var angle = Math.atan(y/x)
+    if(y<0 && x>0)
+        var angle = Math.atan(y/x) + 2*Math.PI
+    
+    // console.log("%i,%i",x,y)
+    // console.log(radio)
+    // console.log(Phaser.Math.radToDeg(angle))
+    state.rad.setText("R "+radio)
+    state.ang.setText("φ "+Phaser.Math.radToDeg(angle))
+}
