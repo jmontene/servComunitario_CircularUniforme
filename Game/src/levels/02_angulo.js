@@ -17,6 +17,7 @@ Game.angulo = function (game){
    this.neededTries = 7;
    this.preview = true;
     this.grid = true;
+    this.tutorial = true;
 };
 
 Game.angulo.prototype = {
@@ -32,7 +33,10 @@ Game.angulo.prototype = {
          [35,20, "¡Has Ganado!"],
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
-   
+            
+      if(success < 1) this.tutorial = true;
+      else this.tutorial = false;
+
       if(success < 2) this.preview = true;
       else this.preview = false;
         
@@ -131,7 +135,18 @@ Game.angulo.prototype = {
         
       this.result = "Intercepta el meteorito";
 	   console.log("Time: %f",this.time);
-	},
+	
+    if(this.tutorial){
+        var word = this.game.add.text(
+            100,730,"Usa el slide para modificar \n el angulo de lanzamiento",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+    }
+        },
+    
 
    update: function(){
       this.sliders.angulo.update();
