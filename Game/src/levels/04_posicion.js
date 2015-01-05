@@ -6,7 +6,7 @@ Game.posicion = function (game){
     this.counter = 0;
     this.name = "posicion";
     
-    this.result = "Llega hasta el satélite";
+    this.result = "Encuentra el satélite";
     this.next = 'won';
     this.curNext = 'posicion';
     this.sliders = {
@@ -56,6 +56,19 @@ Game.posicion.prototype = {
 	earth.body.center.x = this.game.world.centerX
 	earth.body.center.y = this.game.world.centerY
 
+   	//Crea los enemigos
+        this.objangle = generator.angle()
+        this.objradio = generator.integerInRange(150,300)
+	enemy = new Enemy('satelite',this.objangle,this.objradio,10,earth,this.game);
+	enemy.sprite.anchor.setTo(0.5,0.5);
+	enemy.sprite.scale.setTo(0.05,0.05);
+	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
+	enemy.sprite.body.collideWorldBounds = true;
+
+        //Crea button
+	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
+
+        //Crea AIM
         targetImg = 'aim';
 	mTarget = new Ally(targetImg,this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
 	mTarget.sprite.anchor.setTo(0.5,0.5);
@@ -65,7 +78,18 @@ Game.posicion.prototype = {
         mTarget.sprite.input.enableDrag();
 	this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
 	mTarget.initialize();
-	        
+
+        if(this.objangle<0)
+            this.objangle = 360 + this.objangle
+        
+        this.obj = this.game.add.text(
+            100,700,"R:"+this.objradio+" φ:"+this.objangle,{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+
         this.rad = this.game.add.text(
             100,730,"welp",{
                 font: '20px Arial',
@@ -80,12 +104,31 @@ Game.posicion.prototype = {
                 align: 'center'
             }
         );
+
+        this.resText = this.game.add.text(
+            430,20,this.result,{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+                
+        this.result = "Intercepta el meteorito";
         
     },
 
     update: function(){
-        console.log(mTarget.getPosition())
-        toRadian(this,mTarget.getPosition());
+        if(!play){
+            mTarget.sprite.input.enableDrag()
+            toRadian(this,mTarget.getPosition());
+        }else{
+            mTarget.sprite.input.disableDrag()
+            if(this.game.physics.arcade.collide(mTarget.sprite, enemy.sprite,
+                                                null,null, this))
+                console.log("HELL YEAH");
+            
+
+        }
         
     },
     
