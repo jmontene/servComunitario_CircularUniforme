@@ -39,7 +39,7 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('angulo');
+		this.game.state.start('posicion');
 	}
 }
 
