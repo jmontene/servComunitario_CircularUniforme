@@ -7,7 +7,7 @@ Game.radio_angulo = function (game){
    this.name = "radio_angulo";
 	
 	this.result = "Llega hasta el satélite";
-	this.next = 'won';
+	this.next = 'posicion';
    this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,
@@ -27,12 +27,16 @@ Game.radio_angulo = function (game){
 		acc_angular : 0
 	}
    
-   this.neededTries = 7;
+    this.neededTries = 7;
+    this.tutorial = true;
+
 };
 
 Game.radio_angulo.prototype = {
 
 	create: function (){
+      if(success < 1) this.tutorial = true;
+      else this.tutorial = false;
    
       if(success < 2) this.preview = true;
       else this.preview = false;
@@ -135,6 +139,17 @@ Game.radio_angulo.prototype = {
          align: 'center'
          }
       );
+
+    if(this.tutorial){
+        var word = this.game.add.text(
+            100,730,"Usa los slides para modificar\nla posicion a la que\nmovera la nave",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+    }
+            
         
       this.result = "Llega hasta el satélite";
       
