@@ -29,8 +29,8 @@ Game.posicion = function (game){
     
     this.neededTries = 7;
     this.tutorial = true;
-    this.rad = "welp";
-    this.ang = "pelw"
+    this.rad = "0";
+    this.ang = "0"
 
 };
 
@@ -64,6 +64,7 @@ Game.posicion.prototype = {
 	enemy.sprite.scale.setTo(0.05,0.05);
 	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 	enemy.sprite.body.collideWorldBounds = true;
+        enemy.sprite.visible = false;
 
         //Crea button
 	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
@@ -91,14 +92,14 @@ Game.posicion.prototype = {
         );
 
         this.rad = this.game.add.text(
-            100,730,"welp",{
+            100,730,"R 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
         this.ang = this.game.add.text(
-            100,760,"pelw",{
+            100,760,"φ 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -120,14 +121,17 @@ Game.posicion.prototype = {
     update: function(){
         if(!play){
             mTarget.sprite.input.enableDrag()
-            toRadian(this,mTarget.getPosition());
-        }else{
-            mTarget.sprite.input.disableDrag()
-            if(this.game.physics.arcade.collide(mTarget.sprite, enemy.sprite,
-                                                null,null, this))
-                console.log("HELL YEAH");
             
-
+        }else{
+            mTarget.sprite.input.disableDrag();
+            toRadian(this,mTarget.getPosition());
+            
+            console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
+            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<9){
+                enemy.sprite.visible=true
+            }
+            button.setFrames(1,1,0);
+            play =! play;
         }
         
     },
