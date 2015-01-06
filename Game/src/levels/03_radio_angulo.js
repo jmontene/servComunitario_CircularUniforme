@@ -7,7 +7,7 @@ Game.radio_angulo = function (game){
    this.name = "radio_angulo";
 	
 	this.result = "Llega hasta el satélite";
-	this.next = 'won';
+	this.next = 'posicion';
    this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,

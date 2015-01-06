@@ -68,6 +68,26 @@ Game.posicion.prototype = {
 
         //Crea button
 	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
+   
+   this.popArgs = [
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"]
+        ];
+   
+   //Crear el popup
+		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
+      var curArgs = this.popArgs[success];
+		var t = new Item('text',0,-50,curArgs[2],[
+			'40px Arial',
+			'#ffffff',
+			'center'
+			]);
+		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
         //Crea AIM
         targetImg = 'aim';
@@ -127,8 +147,10 @@ Game.posicion.prototype = {
             toRadian(this,mTarget.getPosition());
             
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
-            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<9){
+            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<10){
                 enemy.sprite.visible=true
+                this.result = "Lo has logrado!";
+                this.game.state.getCurrentState().pop.show();
             }
             button.setFrames(1,1,0);
             play =! play;
