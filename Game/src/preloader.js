@@ -35,7 +35,11 @@ Game.preloader.prototype = {
         this.load.image('backgroundGridOn','assets/sprites/backgroundGridOn.png');
         this.load.image('backgroundGridOff','assets/sprites/backgroundGridOff.png');
             
-		Slider.preload(this,'space');
+            this.load.spritesheet('bt1','assets/sprites/level1ButtonSheet.png',421,401);
+            this.load.spritesheet('bt2','assets/sprites/level2ButtonSheet.png',421,401)
+            this.load.spritesheet('bt3','assets/sprites/level3ButtonSheet.png',421,401)
+            
+	    Slider.preload(this,'space');
 		
 	},
 	

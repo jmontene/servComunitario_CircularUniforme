@@ -39,8 +39,37 @@ Game.menu.prototype = {
 	},
 
 	start: function(){
-		this.game.state.start('angulo');
+		this.game.state.start('selector');
 	}
+}
+
+Game.selector = function (game){
+};
+
+Game.selector.prototype = {
+
+	create: function(){
+	    b = this.game.add.button(this.game.world.centerX+17,this.game.world.centerY-200,'bt1',this.angulo,this,1,0,0);
+            b.anchor.setTo(0.5,0.5);
+            b.scale.setTo(0.25,0.25);
+            b2 = this.game.add.button(this.game.world.centerX+17,this.game.world.centerY-35,'bt2',this.rad_ang,this,1,0,0);
+            b2.anchor.setTo(0.5,0.5);
+            b2.scale.setTo(0.25,0.25);
+	    b3 = this.game.add.button(this.game.world.centerX+17,this.game.world.centerY+125,'bt3',this.posicion,this,1,0,0);
+            b3.anchor.setTo(0.5,0.5);
+            b3.scale.setTo(0.25,0.25);
+	},
+
+    angulo: function(){
+	this.game.state.start('angulo');
+    },
+    rad_ang: function(){
+	this.game.state.start('radio_angulo');
+    },
+    posicion: function(){
+	this.game.state.start('posicion');
+    }
+
 }
 
 Game.won = function (game){
