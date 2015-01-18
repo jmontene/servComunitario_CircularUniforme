@@ -172,6 +172,6 @@ function toRadian (state,pos) {
     // console.log("%i,%i",x,y)
     // console.log(radio)
     // console.log(Phaser.Math.radToDeg(angle))
-    state.rad.setText("R "+Math.round(radio))
-    state.ang.setText("φ "+Math.round(Phaser.Math.radToDeg(angle)))
+    state.rad.setText("R: "+Math.round(radio))
+    state.ang.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)))
 }

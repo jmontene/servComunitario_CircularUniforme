@@ -39,8 +39,8 @@ Game.posicion.prototype = {
     create: function (){
 
         //background
-        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,  'backgroundGridOn');
-      
+        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
+        
         if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
 
         bg.anchor.setTo(0.5,0.5);
@@ -68,26 +68,26 @@ Game.posicion.prototype = {
 
         //Crea button
 	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
-   
-   this.popArgs = [
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"]
+        
+        this.popArgs = [
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"]
         ];
-   
-   //Crear el popup
-		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-      var curArgs = this.popArgs[success];
-		var t = new Item('text',0,-50,curArgs[2],[
-			'40px Arial',
-			'#ffffff',
-			'center'
-			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
+        
+        //Crear el popup
+	var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
+        var curArgs = this.popArgs[success];
+	var t = new Item('text',0,-50,curArgs[2],[
+	    '40px Arial',
+	    '#ffffff',
+	    'center'
+	]);
+	this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
         //Crea AIM
         targetImg = 'aim';
@@ -104,22 +104,39 @@ Game.posicion.prototype = {
             this.objangle = 360 + this.objangle
         
         this.obj = this.game.add.text(
-            100,700,"R:"+this.objradio+" φ:"+this.objangle,{
+            380,40,"Sus coordenadas son R:"+this.objradio+" φ:"+this.objangle,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
 
+        this.game.add.text(
+            100,730,"Desliza el marcador hasta\nlas coordenadas del satélite",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+
+        this.game.add.text(
+            730,710,"Elegiste las coordenadas",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+        
+        
         this.rad = this.game.add.text(
-            100,730,"R 0",{
+            840,730,"R: 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
         this.ang = this.game.add.text(
-            100,760,"φ 0",{
+            840,750,"φ: 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -134,8 +151,6 @@ Game.posicion.prototype = {
             }
         );
                 
-        this.result = "Intercepta el meteorito";
-        
     },
 
     update: function(){
@@ -147,9 +162,9 @@ Game.posicion.prototype = {
             toRadian(this,mTarget.getPosition());
             
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
-            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<10){
+            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<36){
                 enemy.sprite.visible=true
-                this.result = "Lo has logrado!";
+                //this.result = "Lo has logrado!";
                 this.game.state.getCurrentState().pop.show();
             }
             button.setFrames(1,1,0);
