@@ -33,7 +33,6 @@ Enemy.prototype = {
         return new Phaser.Point(this.sprite.body.x-this.target.x,
                                 this.target.y-this.sprite.body.y)
     }
-
    
 };
 
@@ -107,14 +106,17 @@ Ally.prototype = {
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
 	this.result = "Impacto. Intenta de Nuevo"
-	onClick();
+    this.error++;
+    this.err.setText("Errores: "+this.error);
+    onClick();
 }
 
 function collide_ally(earth, enemy){
 	console.log("collide_Ally was called");
 	this.result = "Lo has logrado!"
-	onClick();
-	this.game.state.getCurrentState().pop.show();
+    onClick();
+    this.game.state.getCurrentState().correct++;
+    this.game.state.getCurrentState().pop.show();    
 }
 
 function collide_find(mTarget, ally){
@@ -148,6 +150,17 @@ function onClick () {
 		button.setFrames(1,1,0);
 	}
 }
+function onClickWithCounter () {
+	play =! play;
+	if(play){
+	    button.setFrames(0,0,1);
+        }else{
+	    button.setFrames(1,1,0);
+            this.game.state.getCurrentState().error++;
+            this.game.state.getCurrentState().err.setText("Errores: "+this.error);
+	}
+}
+
 
 function toRadian (state,pos) {
     // var x = pos.x - state.game.world.centerX

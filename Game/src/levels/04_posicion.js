@@ -27,10 +27,12 @@ Game.posicion = function (game){
 	acc_angular : 0
     }
     
-    this.neededTries = 7;
+    this.neededTries = 10;
     this.tutorial = true;
     this.rad = "0";
-    this.ang = "0"
+    this.ang = "0";
+    this.correct = 0;
+    this.error = 0;
 
 };
 
@@ -38,6 +40,9 @@ Game.posicion.prototype = {
 
     create: function (){
 
+        if(success < 1) this.preview = true;
+        else this.preview = false;
+        
         //background
         bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
         
@@ -65,11 +70,20 @@ Game.posicion.prototype = {
 	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 	enemy.sprite.body.collideWorldBounds = true;
         enemy.sprite.visible = false;
+        if(this.preview){
+	    prev = new Enemy('sateliteprev',this.objangle,this.objradio,10,earth,this.game);
+	    prev.sprite.anchor.setTo(0.5,0.5);
+	    prev.sprite.scale.setTo(0.05,0.05);
+            prev.sprite.visible = false;
+        }
 
         //Crea button
 	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
         
         this.popArgs = [
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
+            [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
@@ -143,6 +157,22 @@ Game.posicion.prototype = {
             }
         );
 
+        this.cor = this.game.add.text(
+            840,20,"Éxitos: "+this.correct+"/10",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+        this.err = this.game.add.text(
+            840,40,"Errores: "+this.error,{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+
+
         this.resText = this.game.add.text(
             430,20,this.result,{
                 font: '20px Arial',
@@ -164,9 +194,17 @@ Game.posicion.prototype = {
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
             if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<36){
                 enemy.sprite.visible=true
+                this.correct++;
                 //this.result = "Lo has logrado!";
                 this.game.state.getCurrentState().pop.show();
+            }else{
+                this.error++;
+                if(this.preview){
+	            prev.sprite.visible = true;
+                }
+                this.err.setText("Errores: "+this.error);
             }
+            
             button.setFrames(1,1,0);
             play =! play;
         }

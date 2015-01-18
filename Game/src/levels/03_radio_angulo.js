@@ -27,16 +27,18 @@ Game.radio_angulo = function (game){
 		acc_angular : 0
 	}
    
-    this.neededTries = 7;
+    this.neededTries = 10;
     this.tutorial = true;
+    this.correct = 0;
+    this.error = 0;
 
 };
 
 Game.radio_angulo.prototype = {
 
 	create: function (){
-      if(success < 1) this.tutorial = true;
-      else this.tutorial = false;
+      // if(success < 1) this.tutorial = true;
+      // else this.tutorial = false;
    
       if(success < 2) this.preview = true;
       else this.preview = false;
@@ -46,18 +48,22 @@ Game.radio_angulo.prototype = {
       
       this.popArgs = [
          [35,20, "¡Has Ganado!"],
-         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [60,20, "¡Ahora intentalo sin\n el marcador!"],
          [35,20, "¡Has Ganado!"],
-         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [60,20, "¡Ahora intentalo sin\n las guías!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"]
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+          [35,20, "¡Has Ganado!"],
+          [60,20, "Prepárate para el\n siguiente reto!!"]
         ];
       
       //background
         bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
-      
-        if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
+
+            if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,'backgroundGridOff');
+
 
       bg.anchor.setTo(0.5,0.5);
       bg.scale.setTo(0.55,0.55);
@@ -142,13 +148,27 @@ Game.radio_angulo.prototype = {
 
     if(this.tutorial){
         var word = this.game.add.text(
-            100,730,"Usa los slides para modificar\nla posicion a la que\nmovera la nave",{
+            100,730,"Usa los sliders para modificar\nla posicion a la que\nmovera la nave",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
     }
+            this.cor = this.game.add.text(
+                840,20,"Éxitos: "+this.correct+"/10",{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
+            this.err = this.game.add.text(
+                840,40,"Errores: "+this.error,{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
             
         
       this.result = "Llega hasta el satélite";
@@ -186,10 +206,13 @@ Game.radio_angulo.prototype = {
          }else if(this.gameState == "checkColl" && ship.sprite.animations.getAnimation('teleportBack').isFinished){
             ship.sprite.frame = 0;
             if(!this.coll){
-               this.lost = true;
+                this.lost = true;
+                this.error++;
+                this.err.setText("Errores: "+this.error);
                this.sTime = this.game.time.now;
             }else{
-               this.win = true;
+                this.win = true;
+                this.correct++;
                this.result = "Lo has logrado!";
                this.game.state.getCurrentState().pop.show();
             }

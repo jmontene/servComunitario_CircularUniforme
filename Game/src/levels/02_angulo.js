@@ -14,10 +14,13 @@ Game.angulo = function (game){
 		acc_angular : null
 	}
 	this.pop = null;
-   this.neededTries = 7;
+   this.neededTries = 10;
    this.preview = true;
     this.grid = true;
     this.tutorial = true;
+    this.correct = 0;
+    this.error = 0;
+
 };
 
 Game.angulo.prototype = {
@@ -26,16 +29,20 @@ Game.angulo.prototype = {
    
       this.popArgs = [
          [35,20, "¡Has Ganado!"],
-         [60,20, "¡Ahora intentalo sin\n la retícula!"],
+         [60,20, "¡Ahora intentalo sin\n el marcador!"],
          [35,20, "¡Has Ganado!"],
-         [60,20, "¡Ahora intentalo sin\n los ángulos!"],
+         [60,20, "¡Ahora intentalo sin\n las guías!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
-            
-      if(success < 1) this.tutorial = true;
-      else this.tutorial = false;
+
+            success = 9;
+      // if(success < 1) this.tutorial = true;
+      // else this.tutorial = false;
 
       if(success < 2) this.preview = true;
       else this.preview = false;
@@ -46,7 +53,7 @@ Game.angulo.prototype = {
       //background
        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
       
-       if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
+       if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,'backgroundGridOff');
         
       bg.anchor.setTo(0.5,0.5);
       bg.scale.setTo(0.55,0.55);
@@ -93,7 +100,7 @@ Game.angulo.prototype = {
 		enemy.sprite.body.collideWorldBounds = true;
       prev.sprite.bringToTop();
 
-		button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
+		button = this.game.add.button(475,730,'button',onClickWithCounter,this,1,1,0);
 	
 		//Crear un slider
 		this.sliders.angulo = new Slider(this.game,0,359,1,0);
@@ -138,13 +145,28 @@ Game.angulo.prototype = {
 	
     if(this.tutorial){
         var word = this.game.add.text(
-            100,730,"Usa el slide para modificar \n el angulo de lanzamiento",{
+            100,730,"Usa el slider para modificar \n el angulo de lanzamiento",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
     }
+                        this.cor = this.game.add.text(
+                840,20,"Éxitos: "+this.correct+"/10",{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
+            this.err = this.game.add.text(
+                840,40,"Errores: "+this.error,{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
+
         },
     
 
