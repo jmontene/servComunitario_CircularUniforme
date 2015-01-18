@@ -55,7 +55,7 @@ Game.radio_angulo.prototype = {
         ];
       
       //background
-        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,  'backgroundGridOn');
+        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
       
         if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
 
