@@ -39,7 +39,9 @@ Game.posicion = function (game){
 Game.posicion.prototype = {
 
     create: function (){
-
+    
+        success = 9;
+         
         if(success < 1) this.preview = true;
         else this.preview = false;
         
@@ -62,7 +64,7 @@ Game.posicion.prototype = {
 	earth.body.center.y = this.game.world.centerY
 
    	//Crea los enemigos
-        this.objangle = generator.angle()
+        this.objangle = generator.integerInRange(90*curQuad,90*curQuad+90)
         this.objradio = generator.integerInRange(150,300)
 	enemy = new Enemy('satelite',this.objangle,this.objradio,10,earth,this.game);
 	enemy.sprite.anchor.setTo(0.5,0.5);
@@ -75,6 +77,8 @@ Game.posicion.prototype = {
 	    prev.sprite.anchor.setTo(0.5,0.5);
 	    prev.sprite.scale.setTo(0.05,0.05);
             prev.sprite.visible = false;
+            enemy.sprite.visible = true;
+            enemy.sprite.alpha = 0.5;
         }
 
         //Crea button
@@ -197,10 +201,14 @@ Game.posicion.prototype = {
             toRadian(this,mTarget.getPosition());
             
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
-            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<46){
+            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<36){
                 enemy.sprite.visible=true
                 this.correct++;
-                //this.result = "Lo has logrado!";
+                if(success == this.neededTries-1 && this.error == 0){
+                  this.pop.text.setText("Perfecto!\nFelicitaciones!");
+                  this.popArgs[this.neededTries-1] = [60,20, 
+                  "Perfecto!\nFelicitaciones!"];
+                }
                 this.game.state.getCurrentState().pop.show();
             }else{
                 this.error++;

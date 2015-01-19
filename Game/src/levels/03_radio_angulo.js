@@ -88,7 +88,7 @@ Game.radio_angulo.prototype = {
 		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('satelite',generator.angle(),generator.integerInRange(150,300),10,earth,this.game);
+		enemy = new Enemy('satelite',generator.integerInRange(90*curQuad,90*curQuad+90),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -219,6 +219,11 @@ Game.radio_angulo.prototype = {
                 this.win = true;
                 this.correct++;
                this.result = "Lo has logrado!";
+               if(success == this.neededTries-1 && this.error == 0){
+                  this.pop.text.setText("Perfecto!\nFelicitaciones!");
+                  this.popArgs[this.neededTries-1] = [60,20, 
+                  "Perfecto!\nFelicitaciones!"];
+               }
                this.game.state.getCurrentState().pop.show();
             }
          }

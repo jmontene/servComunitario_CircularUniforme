@@ -39,7 +39,7 @@ Game.angulo.prototype = {
          [35,20, "¡Has Ganado!"],
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
-
+      
       if(success < 2) this.preview = true;
       else this.preview = false;
         
@@ -89,7 +89,7 @@ Game.angulo.prototype = {
       earth.bringToTop();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.angle(),300,10,earth,this.game);
+		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,45*curQuad+90),300,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -196,8 +196,13 @@ Game.angulo.prototype = {
       prev.move(0);
       mTarget.move(0);
       this.game.physics.arcade.collide(earth, enemy.sprite, collide_earth, null, this);
-      this.game.physics.arcade.collide(missile.sprite, enemy.sprite, collide_ally, 
-		null, this);
+      if(this.game.physics.arcade.collide(missile.sprite, enemy.sprite, null, null, this)){
+         if(success == this.neededTries-1 && this.error == 0){
+            this.pop.text.setText("Perfecto!\nFelicitaciones!");
+            this.popArgs[this.neededTries-1] = [60,20, "Perfecto!\nFelicitaciones!"];
+         }
+         collide_ally.call(this);
+      }
       this.resText.setText(this.result);
    },
         

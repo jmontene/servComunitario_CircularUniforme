@@ -131,6 +131,7 @@ function nextLevel(){
    state = this.game.state.getCurrentState();
    console.log(state);
    success += 1;
+   curQuad += 1;
    if(success != state.neededTries){
       state.curNext = state.name;
    }else{
@@ -163,6 +164,7 @@ function onClickWithCounter () {
 
 function goToMenu() {
     success = 0;
+    curQuad = 1;
     this.correct = 0;
     this.error = 0;
     console.log(success);

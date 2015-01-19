@@ -7,6 +7,7 @@ m = timer.getMinutes().toString();
 h = timer.getHours().toString();
 generator = new Phaser.RandomDataGenerator([s,m,h]);
 success = 0;
+curQuad = 1;
 
 Game.boot = function (game){
 };
