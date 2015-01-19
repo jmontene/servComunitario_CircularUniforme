@@ -161,6 +161,13 @@ function onClickWithCounter () {
 	}
 }
 
+function goToMenu() {
+    success = 0;
+    this.correct = 0;
+    this.error = 0;
+    console.log(success);
+    this.game.state.start('menu');
+}
 
 function toRadian (state,pos) {
     // var x = pos.x - state.game.world.centerX

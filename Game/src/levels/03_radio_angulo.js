@@ -117,6 +117,11 @@ Game.radio_angulo.prototype = {
 		this.sliders.radio = new Slider(this.game,100,300,1,200);
 		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
 		this.prev.radio = this.sliders.radio.value;
+      
+      //Crear boton de back
+      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      b.anchor.setTo(0.05,0.05);
+      b.scale.setTo(0.25,0.25);
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);

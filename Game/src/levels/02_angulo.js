@@ -40,10 +40,6 @@ Game.angulo.prototype = {
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
 
-            success = 9;
-      // if(success < 1) this.tutorial = true;
-      // else this.tutorial = false;
-
       if(success < 2) this.preview = true;
       else this.preview = false;
         
@@ -101,6 +97,12 @@ Game.angulo.prototype = {
       prev.sprite.bringToTop();
 
 		button = this.game.add.button(475,730,'button',onClickWithCounter,this,1,1,0);
+      
+      //Crear el boton de back
+      console.log(this.game);
+      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      b.anchor.setTo(0.05,0.05);
+      b.scale.setTo(0.25,0.25);
 	
 		//Crear un slider
 		this.sliders.angulo = new Slider(this.game,0,359,1,0);

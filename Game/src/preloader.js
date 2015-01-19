@@ -28,20 +28,21 @@ Game.preloader.prototype = {
       this.load.image('missile','assets/sprites/cohete.png');
       this.load.image('missileprev','assets/sprites/coheteprev.png');
       this.load.image('aim','assets/sprites/aim.png');
-            this.load.image('satelite','assets/sprites/Satellite.png');
-            this.load.image('sateliteprev','assets/sprites/Satelliteprev.png');
+      this.load.image('satelite','assets/sprites/Satellite.png');
+      this.load.image('sateliteprev','assets/sprites/Satelliteprev.png');
 
       this.load.image('menuBackground','assets/sprites/menuBackground.png');
       this.load.spritesheet('menuButton','assets/sprites/menuButtonSheet.png',421,401);
       this.load.image('background','assets/sprites/background.png');
-        this.load.image('backgroundGridOn','assets/sprites/backgroundGridOn.png');
-        this.load.image('backgroundGridOff','assets/sprites/backgroundGridOff.png');
+      this.load.image('backgroundGridOn','assets/sprites/backgroundGridOn.png');
+      this.load.image('backgroundGridOff','assets/sprites/backgroundGridOff.png');
             
-            this.load.spritesheet('bt1','assets/sprites/level1ButtonSheet.png',421,401);
-            this.load.spritesheet('bt2','assets/sprites/level2ButtonSheet.png',421,401)
-            this.load.spritesheet('bt3','assets/sprites/level3ButtonSheet.png',421,401)
+      this.load.spritesheet('bt1','assets/sprites/level1ButtonSheet.png',421,401);
+      this.load.spritesheet('bt2','assets/sprites/level2ButtonSheet.png',421,401);
+      this.load.spritesheet('bt3','assets/sprites/level3ButtonSheet.png',421,401);
+      this.load.spritesheet('back','assets/sprites/goBack.png',421,401);
             
-	    Slider.preload(this,'space');
+	   Slider.preload(this,'space');
 		
 	},
 	

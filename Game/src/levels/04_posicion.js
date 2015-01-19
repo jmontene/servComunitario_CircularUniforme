@@ -113,6 +113,11 @@ Game.posicion.prototype = {
         mTarget.sprite.input.enableDrag();
 	this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
 	mTarget.initialize();
+   
+   //Crear boton de back
+   var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+   b.anchor.setTo(0.05,0.05);
+   b.scale.setTo(0.25,0.25);
 
         if(this.objangle<0)
             this.objangle = 360 + this.objangle
@@ -192,7 +197,7 @@ Game.posicion.prototype = {
             toRadian(this,mTarget.getPosition());
             
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
-            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<36){
+            if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<46){
                 enemy.sprite.visible=true
                 this.correct++;
                 //this.result = "Lo has logrado!";
