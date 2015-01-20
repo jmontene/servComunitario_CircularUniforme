@@ -83,13 +83,13 @@ Game.angulo.prototype = {
 		mTarget.initialize();      
       
       //Crear el misil
-      missile = new Enemy('missile',90,20,80,earth,this.game);
+      missile = new Enemy('missile',90,20,100,earth,this.game);
       missile.sprite.scale.setTo(0.05,0.05);
       this.game.physics.enable(missile.sprite,Phaser.Physics.ARCADE);
       earth.bringToTop();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,45*curQuad+90),300,10,earth,this.game);
+		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,45*curQuad+90),300,50,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -129,7 +129,7 @@ Game.angulo.prototype = {
       this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
       this.timeText = this.game.add.text(
          10,10,"0",{
-         font: '20px Arial',
+         font: '40px Arial',
          fill: '#FFFFFF',
          align: 'center'
       });
