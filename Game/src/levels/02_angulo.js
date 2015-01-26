@@ -91,7 +91,7 @@ Game.angulo.prototype = {
 		//Crea los enemigos
 		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,45*curQuad+90),300,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
-		enemy.sprite.scale.setTo(0.25,0.25);
+		enemy.sprite.scale.setTo(0.20,0.20);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
       prev.sprite.bringToTop();
@@ -100,7 +100,7 @@ Game.angulo.prototype = {
       
       //Crear el boton de back
       console.log(this.game);
-      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      var b = this.game.add.button(30,30,'back',goToMenu,this,1,0,0);
       b.anchor.setTo(0.05,0.05);
       b.scale.setTo(0.25,0.25);
 	
