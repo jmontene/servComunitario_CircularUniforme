@@ -119,7 +119,7 @@ Game.radio_angulo.prototype = {
 		this.prev.radio = this.sliders.radio.value;
       
       //Crear boton de back
-      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      var b = this.game.add.button(30,30,,'back',goToMenu,this,1,0,0);
       b.anchor.setTo(0.05,0.05);
       b.scale.setTo(0.25,0.25);
 		
