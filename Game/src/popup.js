@@ -18,13 +18,13 @@ Popup = function(img,x,y,xScale,yScale,itemList,game){
 	for(i=0;i<itemList.length;++i){
 		var cur = itemList[i];
 		if(cur.type == 'text'){
-			var p = this.game.add.text(this.x+cur.x,this.y+cur.y,cur.content,{
+			this.text = this.game.add.text(this.x+cur.x,this.y+cur.y,cur.content,{
 				font: cur.attr[0],
 				fill: cur.attr[1],
 				align: cur.attr[2]
 			});
-			p.anchor.setTo(0.5,0.5);
-			this.add(p);
+			this.text.anchor.setTo(0.5,0.5);
+			this.add(this.text);
 		}else if(cur.type == 'button'){
 			var b = this.game.add.button(this.x+cur.x,this.y+cur.y,cur.content,
 			cur.attr[0],cur.attr[1],cur.attr[2],cur.attr[3],cur.attr[4]);

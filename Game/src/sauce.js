@@ -1,6 +1,7 @@
 //Definicion de la clase Enemy
 function Enemy(img,angle,distance,speed,target,game){
-   this.game = game;
+    this.game = game;
+    this.target = target;
 	var radAngle = Phaser.Math.degToRad(angle);
 	var xPos = target.body.x + distance * Math.cos(radAngle);
 	var yPos = target.body.y - distance * Math.sin(radAngle);
@@ -27,13 +28,17 @@ Enemy.prototype = {
    change_angle: function(val){
       this.sprite.angle = -val+90;
    },
+
+    getPosition: function(){
+        return new Phaser.Point(this.sprite.body.x-this.target.x,
+                                this.target.y-this.sprite.body.y)
+    }
    
 };
 
 //Definicion de la clase Ally
 function Ally(img,x,y,angle,dir,target,game){
-	var spdummy = game.add.sprite(target.body.center.x,target.body.center.y,img);
-	this.sprite = spdummy;
+	this.sprite = game.add.sprite(target.body.center.x,target.body.center.y,img);
 	this.angle = angle;
 	this.dir = dir;
 	
@@ -89,32 +94,51 @@ Ally.prototype = {
 	
 		this.sprite.angle = -Phaser.Math.radToDeg(dummy_angle)+90;
 
-	}
+	},
+
+    getPosition: function(){
+        return new Phaser.Point(this.sprite.body.x -this.target.x+this.fix.x,
+                                this.target.y-this.fix.y-this.sprite.body.y)
+    }
 }
    
 
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
 	this.result = "Impacto. Intenta de Nuevo"
-	onClick();
+    this.error++;
+    this.err.setText("Errores: "+this.error);
+    onClick();
 }
 
 function collide_ally(earth, enemy){
 	console.log("collide_Ally was called");
 	this.result = "Lo has logrado!"
-	onClick();
-	this.game.state.getCurrentState().pop.show();
+    onClick();
+    this.game.state.getCurrentState().correct++;
+    this.game.state.getCurrentState().pop.show();    
 }
+
+function collide_find(mTarget, ally){
+	console.log("collide_find was called");
+	this.result = "Lo has logrado!"
+	onClick();
+//	this.game.state.getCurrentState().pop.show();
+}
+
 
 function nextLevel(){
    state = this.game.state.getCurrentState();
+   console.log(state);
    success += 1;
+   curQuad += 1;
    if(success != state.neededTries){
       state.curNext = state.name;
    }else{
       success = 0;
       state.curNext = state.next;
    }
+   console.log(this.game.state.getCurrentState());
 	this.game.state.start(this.game.state.getCurrentState().curNext);
 }
 
@@ -127,4 +151,49 @@ function onClick () {
 		button.setFrames(1,1,0);
 	}
 }
+function onClickWithCounter () {
+	play =! play;
+	if(play){
+	    button.setFrames(0,0,1);
+        }else{
+	    button.setFrames(1,1,0);
+            this.game.state.getCurrentState().error++;
+            this.game.state.getCurrentState().err.setText("Errores: "+this.error);
+	}
+}
 
+function goToMenu() {
+    success = 0;
+    curQuad = 1;
+    this.correct = 0;
+    this.error = 0;
+    console.log(success);
+    this.game.state.start('menu');
+}
+
+function toRadian (state,pos) {
+    // var x = pos.x - state.game.world.centerX
+    // var y = state.game.world.centerY-pos.y
+
+    var x = pos.x
+    var y = pos.y
+    
+    var radio = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+    var angle = 0;
+    if(x<0)
+        angle = Math.atan(y/x) + Math.PI
+    if(x==0 && y>0)
+        angle = Math.PI/2
+    if(x==0 && y<0)
+        angle = (3*Math.PI)/2
+    if(y>=0 && x>0)
+        angle = Math.atan(y/x)
+    if(y<0 && x>0)
+        angle = Math.atan(y/x) + 2*Math.PI
+    
+    // console.log("%i,%i",x,y)
+    // console.log(radio)
+    // console.log(Phaser.Math.radToDeg(angle))
+    state.rad.setText("R: "+Math.round(radio))
+    state.ang.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)))
+}

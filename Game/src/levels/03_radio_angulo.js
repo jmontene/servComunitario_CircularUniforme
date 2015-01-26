@@ -4,9 +4,11 @@ Game.radio_angulo = function (game){
 	this.time = 0;
 	play = false;
 	this.counter = 0;
+   this.name = "radio_angulo";
 	
-	this.result = "radio_angulo";
-	this.next = 'menu';
+	this.result = "Llega hasta el satélite";
+	this.next = 'posicion';
+   this.curNext = 'radio_angulo';
 	this.sliders = {
 		radio : null,
 		angulo : null,
@@ -14,6 +16,9 @@ Game.radio_angulo = function (game){
 		acc_angular : null
 	};
 	this.pop = null;
+   
+   this.preview = true;
+   this.grid = true;
 	
 	this.prev = {
 		radio : 0,
@@ -21,13 +26,47 @@ Game.radio_angulo = function (game){
 		vel_angular : 0,
 		acc_angular : 0
 	}
-	
-	this.win = false;
+   
+    this.neededTries = 10;
+    this.tutorial = true;
+    this.correct = 0;
+    this.error = 0;
+
 };
 
 Game.radio_angulo.prototype = {
 
 	create: function (){
+      // if(success < 1) this.tutorial = true;
+      // else this.tutorial = false;
+   
+      if(success < 2) this.preview = true;
+      else this.preview = false;
+        
+      if(success < 4) this.grid = true;
+      else this.grid = false;
+      
+      this.popArgs = [
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n el marcador!"],
+         [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n las guías!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+         [35,20, "¡Has Ganado!"],
+          [35,20, "¡Has Ganado!"],
+          [60,20, "Prepárate para el\n siguiente reto!!"]
+        ];
+      
+      //background
+        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
+
+            if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,'backgroundGridOff');
+
+
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
 	
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -37,102 +76,195 @@ Game.radio_angulo.prototype = {
 		earth.body.immovable = true;
 		earth.body.center.x = this.game.world.centerX
 		earth.body.center.y = this.game.world.centerY
+      
+      //Target del misil
+      var targetImg = "";
+      if(this.preview) targetImg = 'aim';
+		mTarget = new Ally(targetImg,this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
+		mTarget.sprite.anchor.setTo(0.5,0.5);
+      mTarget.sprite.scale.setTo(0.09,0.09);
+		mTarget.sprite.scale.x *= -mTarget.dir;
+		this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
+		mTarget.initialize();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',180,300,5,earth,this.game);
+		enemy = new Enemy('satelite',generator.integerInRange(90*curQuad,90*curQuad+90),generator.integerInRange(150,300),10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
-		enemy.sprite.scale.setTo(0.25,0.25);
+		enemy.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 		enemy.sprite.body.collideWorldBounds = true;
 
-		button = this.game.add.button(375,500,'button',onClick,this,1,1,0);
+		button = this.game.add.button(475,730,'button',this.startGame,this,1,1,0); 
+      mTarget.sprite.bringToTop();
 	
 		//Crear el sprite de la ultraball de la misma forma, excepto que su posicion
 		//Y depende del radio
-		ship = new Ally('ship',420,100,0.12,-1,earth,this.game);
+		ship = new Ally('shipSheet',420,100,0.12,-1,earth,this.game);
 		ship.sprite.anchor.setTo(0.5,0.5);
-		ship.sprite.scale.setTo(0.05,0.05);
+		ship.sprite.scale.setTo(0.1,0.1);
 		ship.sprite.scale.x *= -ship.dir;
 		this.game.physics.enable(ship.sprite,Phaser.Physics.ARCADE);
 		ship.initialize();
+      ship.sprite.animations.add('teleport',[1,2,3]);
+      ship.sprite.animations.add('teleportBack',[3,2,1]);
+      ship.sprite.frame = 0;
 	
 		//Crear sliders
-		this.sliders.angulo = new Slider(this.game,0,359,1,360+Phaser.Math.radToDeg(ship.inicial_angle));
-		this.sliders.angulo.create(600,550,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"φ");
+		this.sliders.angulo = new Slider(this.game,0,359,1,0);
+		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
 		this.prev.angulo = this.sliders.angulo.value;
 		
-		this.sliders.radio = new Slider(this.game,100,500,1,200);
-		this.sliders.radio.create(600,450,[0.0235,0.0235],[0.15,0.15],[0.15,0.15],15,"R");
+		this.sliders.radio = new Slider(this.game,100,300,1,200);
+		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
 		this.prev.radio = this.sliders.radio.value;
+      
+      //Crear boton de back
+      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      b.anchor.setTo(0.05,0.05);
+      b.scale.setTo(0.25,0.25);
 		
 		//Crear el popup
 		var but = new Item('button',0,40,'button',[nextLevel,this,1,1,0]);
-		var t = new Item('text',0,-50,"Has ganado!!",[
+      var curArgs = this.popArgs[success];
+		var t = new Item('text',0,-50,curArgs[2],[
 			'40px Arial',
 			'#ffffff',
 			'center'
 			]);
-		this.pop = new Popup('panel',this.game.width/2,-150,35,20,[but,t],this.game);
-	    this.win = false;
+		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
-            this.timeText = this.game.add.text(
+      this.timeText = this.game.add.text(
 	    10,10,"0",{
 		font: '20px Arial',
 		fill: '#FFFFFF',
 		align: 'center'
 	    });
 
-	    console.log("Time: %f",this.time);
+      ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      ship.change_radio(this.sliders.radio.value);
+      
+      this.resText = this.game.add.text(
+         430,20,this.result,{
+         font: '20px Arial',
+         fill: '#FFFFFF',
+         align: 'center'
+         }
+      );
 
+    if(this.tutorial){
+        var word = this.game.add.text(
+            100,730,"Usa los sliders para modificar\nla posicion a la que\nmovera la nave",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+    }
+            this.cor = this.game.add.text(
+                840,20,"Éxitos: "+this.correct+"/10",{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
+            this.err = this.game.add.text(
+                840,40,"Errores: "+this.error,{
+                    font: '20px Arial',
+                    fill: '#FFFFFF',
+                    align: 'center'
+                }
+            );
+            
+        
+      this.result = "Llega hasta el satélite";
+      
+      this.gameState = "teleport";
+      this.coll = false;
+      this.win = false;
+      this.doGame = false;
+      this.sTime = this.game.time.now;
             
 	},
 
 	update: function(){
-		//console.log(this.pop);
 		this.sliders.angulo.update();
 		this.sliders.radio.update();
+      
+      mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+      mTarget.change_radio(this.sliders.radio.value);
+      mTarget.move(0);
 	
-		if(play){
+		if(this.doGame && !this.lost && !this.win){
 			this.time++;
-			this.counter++;
 			this.result = "...";
-			ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
-			ship.change_radio(this.sliders.radio.value);
-			if(this.counter >= 20 && !(this.win)){
-				ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
-				ship.change_radio(this.prev.radio);
-				onClick();
-			}
-		}else{
+         if(this.gameState == "teleport"){
+            ship.sprite.animations.play('teleport');
+            this.gameState = "moveIn";
+         }else if(this.gameState == "moveIn" && ship.sprite.animations.getAnimation('teleport').isFinished){
+            ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
+            ship.change_radio(this.sliders.radio.value);
+            ship.move(0);
+            this.gameState = "teleportBack";
+         }else if(this.gameState == "teleportBack"){
+            ship.sprite.animations.play('teleportBack');
+            this.gameState = "checkColl";
+         }else if(this.gameState == "checkColl" && ship.sprite.animations.getAnimation('teleportBack').isFinished){
+            ship.sprite.frame = 0;
+            if(!this.coll){
+                this.lost = true;
+                this.error++;
+                this.err.setText("Errores: "+this.error);
+               this.sTime = this.game.time.now;
+            }else{
+                this.win = true;
+                this.correct++;
+               this.result = "Lo has logrado!";
+               if(success == this.neededTries-1 && this.error == 0){
+                  this.pop.text.setText("Perfecto!\nFelicitaciones!");
+                  this.popArgs[this.neededTries-1] = [60,20, 
+                  "Perfecto!\nFelicitaciones!"];
+               }
+               this.game.state.getCurrentState().pop.show();
+            }
+         }
+      }else if(this.lost){
+         if(this.game.time.now - this.sTime > 1000){
+            this.result = "No llegaste al objetivo. Intenta de nuevo";
+            this.lost = false;
+            this.gameState = "teleport";
+            this.doGame = false;
+         }
+		}else if(!this.win){
 			this.time = 0;
-			this.counter = 0;
 			enemy.reset();
+         ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
+			ship.change_radio(this.prev.radio);
+         ship.move(0);
 		}
-	    this.updateTime();
-
-		ship.move(0);
-		
-		if(!(this.win)) 
-			this.game.physics.arcade.collide(ship.sprite, enemy.sprite, this.winner, null, this);
-		this.game.debug.text(this.result,375,50);
+      
+      this.updateTime();
+      
+      if(!this.coll){
+         this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,null, null, this);
+      }
+      
+		this.resText.setText(this.result);
    },
-	
-	winner : function(ship,enemy){
-		this.win = true;
-		collide_ally.call(this,ship,enemy);
-	},	
-        updateTime: function (){
-        seconds = Math.floor((this.time) / 60);
-        milliseconds = Math.floor(this.time)%60;
+   
+   updateTime: function (){
+      seconds = Math.floor((this.time) / 60);
+      milliseconds = Math.floor(this.time)%60;
 
-        if (milliseconds < 10)
-            milliseconds = '0' + milliseconds;
+      if (milliseconds < 10)
+         milliseconds = '0' + milliseconds;
 	
-        if (seconds < 10)
-            seconds = '0' + seconds;
+      if (seconds < 10)
+         seconds = '0' + seconds;
 	
-        this.timeText.setText(seconds + ':' + milliseconds);
-    }
-
-
+      this.timeText.setText(seconds + ':' + milliseconds);
+    },
+    
+   startGame: function(){
+      this.doGame =! this.doGame;
+   }
 }
