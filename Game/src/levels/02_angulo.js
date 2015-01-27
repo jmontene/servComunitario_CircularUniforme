@@ -14,7 +14,7 @@ Game.angulo = function (game){
 		acc_angular : null
 	}
 	this.pop = null;
-   this.neededTries = 10;
+   this.neededTries = 8;
    this.preview = true;
     this.grid = true;
     this.tutorial = true;
@@ -35,9 +35,7 @@ Game.angulo.prototype = {
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-         [60,20, "Prepárate para el\n siguiente reto!!"]
+         [80,20, "Felicidades! Luego intenta\n hacerlo sin errores!"]
       ];
       
       if(success < 2) this.preview = true;
@@ -155,7 +153,7 @@ Game.angulo.prototype = {
         );
     }
                         this.cor = this.game.add.text(
-                840,20,"Éxitos: "+this.correct+"/10",{
+                840,20,"Éxitos: "+this.correct+"/"+this.neededTries,{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'

@@ -52,9 +52,7 @@ Game.radio_angulo.prototype = {
          [35,20, "¡Has Ganado!"],
          [60,20, "¡Ahora intentalo sin\n las guías!"],
          [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
-          [35,20, "¡Has Ganado!"],
-          [60,20, "Prepárate para el\n siguiente reto!!"]
+         [80,20, "Felicidades! Luego intenta\n hacerlo sin errores!"]
         ];
       
       //background
@@ -117,7 +115,7 @@ Game.radio_angulo.prototype = {
 		this.prev.radio = this.sliders.radio.value;
       
       //Crear boton de back
-      var b = this.game.add.button(30,30,,'back',goToMenu,this,1,0,0);
+      var b = this.game.add.button(30,30,'back',goToMenu,this,1,0,0);
       b.anchor.setTo(0.05,0.05);
       b.scale.setTo(0.25,0.25);
 		
@@ -159,7 +157,7 @@ Game.radio_angulo.prototype = {
         );
     }
             this.cor = this.game.add.text(
-                840,20,"Éxitos: "+this.correct+"/8",{
+                840,20,"Éxitos: "+this.correct+"/"+this.neededTries,{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
