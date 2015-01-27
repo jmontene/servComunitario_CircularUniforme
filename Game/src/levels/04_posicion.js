@@ -39,8 +39,6 @@ Game.posicion = function (game){
 Game.posicion.prototype = {
 
     create: function (){
-    
-        success = 9;
          
         if(success < 1) this.preview = true;
         else this.preview = false;
