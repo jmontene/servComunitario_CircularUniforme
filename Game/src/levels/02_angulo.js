@@ -125,12 +125,6 @@ Game.angulo.prototype = {
 			'center'
 			]);
       this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
-      this.timeText = this.game.add.text(
-         10,10,"0",{
-         font: '40px Arial',
-         fill: '#FFFFFF',
-         align: 'center'
-      });
       
       this.resText = this.game.add.text(
          430,20,this.result,{
@@ -176,20 +170,17 @@ Game.angulo.prototype = {
       this.angleText.setText(this.sliders.angulo.value + '°');
 
       if(play){
-         this.time++;
          this.angleText.setText(this.sliders.angulo.value + '°');
          this.game.physics.arcade.moveToObject(enemy.sprite,earth,enemy.speed);
          this.game.physics.arcade.moveToObject(missile.sprite,mTarget.sprite,missile.speed);
          this.result = "..."
       }else{
          missile.change_angle(this.sliders.angulo.value);
-         this.time = 0;
          enemy.reset();
          missile.reset();
          mTarget.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
          prev.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
       }
-      this.updateTime();
 
       prev.move(0);
       mTarget.move(0);
