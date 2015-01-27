@@ -27,7 +27,7 @@ Game.radio_angulo = function (game){
 		acc_angular : 0
 	}
    
-    this.neededTries = 10;
+    this.neededTries = 6;
     this.tutorial = true;
     this.correct = 0;
     this.error = 0;
@@ -51,8 +51,6 @@ Game.radio_angulo.prototype = {
          [60,20, "¡Ahora intentalo sin\n el marcador!"],
          [35,20, "¡Has Ganado!"],
          [60,20, "¡Ahora intentalo sin\n las guías!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
           [35,20, "¡Has Ganado!"],
@@ -119,7 +117,7 @@ Game.radio_angulo.prototype = {
 		this.prev.radio = this.sliders.radio.value;
       
       //Crear boton de back
-      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      var b = this.game.add.button(30,30,,'back',goToMenu,this,1,0,0);
       b.anchor.setTo(0.05,0.05);
       b.scale.setTo(0.25,0.25);
 		
@@ -133,12 +131,12 @@ Game.radio_angulo.prototype = {
 			]);
 		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
-      this.timeText = this.game.add.text(
-	    10,10,"0",{
-		font: '20px Arial',
-		fill: '#FFFFFF',
-		align: 'center'
-	    });
+      // this.timeText = this.game.add.text(
+      // 	    430,20,"0",{
+      // 		font: '20px Arial',
+      // 		fill: '#FFFFFF',
+      // 		align: 'center'
+      // 	    });
 
       ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
       ship.change_radio(this.sliders.radio.value);
@@ -161,7 +159,7 @@ Game.radio_angulo.prototype = {
         );
     }
             this.cor = this.game.add.text(
-                840,20,"Éxitos: "+this.correct+"/10",{
+                840,20,"Éxitos: "+this.correct+"/8",{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
@@ -214,7 +212,7 @@ Game.radio_angulo.prototype = {
                 this.lost = true;
                 this.error++;
                 this.err.setText("Errores: "+this.error);
-               this.sTime = this.game.time.now;
+		this.sTime = this.game.time.now;
             }else{
                 this.win = true;
                 this.correct++;
@@ -261,7 +259,7 @@ Game.radio_angulo.prototype = {
       if (seconds < 10)
          seconds = '0' + seconds;
 	
-      this.timeText.setText(seconds + ':' + milliseconds);
+//      this.timeText.setText(seconds + ':' + milliseconds);
     },
     
    startGame: function(){
