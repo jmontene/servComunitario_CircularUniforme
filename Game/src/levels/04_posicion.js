@@ -31,26 +31,51 @@ Game.posicion = function (game){
     this.tutorial = true;
     this.rad = "0";
     this.ang = "0";
+    this.rmeh = "0";
+    this.ameh = "0";
     this.correct = 0;
     this.error = 0;
+    this.intP = 0;
 
 };
 
 Game.posicion.prototype = {
-
+    
     create: function (){
     	
         if(success < 1) this.preview = true;
         else this.preview = false;
         
         //background
-        bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
+         bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff');
+       bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
         
-        if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+40,'backgroundGridOff');
+        if (!(this.grid)) bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff') ;
 
-        bg.anchor.setTo(0.5,0.5);
-        bg.scale.setTo(0.55,0.55);
+      bgGrid.anchor.setTo(0.5,0.5);
+      bgGrid.scale.setTo(0.55,0.55);
+      bg.anchor.setTo(0.5,0.5);
+      bg.scale.setTo(0.55,0.55);
+    
+        hud= this.game.add.sprite(0,655,'hud');
+        hud.scale.setTo(0.51,0.52);
+        
+        hudU= this.game.add.sprite(0,140,'hud');
+        hudU.scale.setTo(0.51,-0.52);
+        
+       //Barra de Progreso
+        
+        progress = this.game.add.sprite(120,40,'pborder');
+        progress.scale.setTo(0.3,0.03);
+        
+        intP = this.correct*0.024;
 
+        progressB = this.game.add.sprite(147,43,'pbar');
+        progressB.scale.setTo(intP,0.03);
+        
+        err = this.game.add.sprite(800,10,'error');
+        err.scale.setTo(0.1,0.1);
+    
         
 	//La tierra (Siempre se crea en todos los niveles)
 	earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -117,15 +142,15 @@ Game.posicion.prototype = {
 	mTarget.initialize();
    
    //Crear boton de back
-   var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
-   b.anchor.setTo(0.05,0.05);
-   b.scale.setTo(0.25,0.25);
+    var b = this.game.add.button(this.game.world.width-70,30,'back',goToMenu,this,1,0,0);
+    b.anchor.setTo(0.05,0.05);
+    b.scale.setTo(0.15,0.15);
 
         if(this.objangle<0)
             this.objangle = 360 + this.objangle
         
         this.obj = this.game.add.text(
-            380,40,"Sus coordenadas son R:"+this.objradio+" φ:"+this.objangle,{
+            350,40,"Sus coordenadas son R:"+this.objradio+" φ:"+this.objangle,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -148,6 +173,21 @@ Game.posicion.prototype = {
             }
         );
         
+        this.rmeh = this.game.add.text(
+            20,20,"R: 0",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
+        
+         this.ameh = this.game.add.text(
+            20,40,"φ: 0",{
+                font: '20px Arial',
+                fill: '#FFFFFF',
+                align: 'center'
+            }
+        );
         
         this.rad = this.game.add.text(
             840,730,"R: 0",{
@@ -165,14 +205,14 @@ Game.posicion.prototype = {
         );
 
         this.cor = this.game.add.text(
-            840,20,"Éxitos: "+this.correct+"/10",{
+            170,20,"Éxitos \n"+this.correct+"/10",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
         this.err = this.game.add.text(
-            840,40,"Errores: "+this.error,{
+            820,40,"Errores\n"+this.error,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -181,7 +221,7 @@ Game.posicion.prototype = {
 
 
         this.resText = this.game.add.text(
-            430,20,this.result,{
+            400,20,this.result,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -192,7 +232,7 @@ Game.posicion.prototype = {
 
     update: function(){
         if(!play){
-            mTarget.sprite.input.enableDrag()
+            mTarget.sprite.input.enableDrag();
             
         }else{
             mTarget.sprite.input.disableDrag();
@@ -218,6 +258,8 @@ Game.posicion.prototype = {
             
             button.setFrames(1,1,0);
             play =! play;
+
+
         }
         
     },
@@ -225,6 +267,7 @@ Game.posicion.prototype = {
     updateTime: function (){
         seconds = Math.floor((this.time) / 60);
         milliseconds = Math.floor(this.time)%60;
+        
 
         if (milliseconds < 10)
             milliseconds = '0' + milliseconds;
@@ -233,6 +276,7 @@ Game.posicion.prototype = {
             seconds = '0' + seconds;
 	
         this.timeText.setText(seconds + ':' + milliseconds);
+
     },
     
     startGame: function(){

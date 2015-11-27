@@ -17,9 +17,11 @@ Game.angulo = function (game){
    this.neededTries = 10;
    this.preview = true;
     this.grid = true;
+    this.gridD = true;
     this.tutorial = true;
     this.correct = 0;
     this.error = 0;
+    this.intP = 0;
 
 };
 
@@ -31,28 +33,55 @@ Game.angulo.prototype = {
          [35,20, "¡Has Ganado!"],
          [60,20, "¡Ahora intentalo sin\n el marcador!"],
          [35,20, "¡Has Ganado!"],
+         [60,20, "¡Ahora intentalo sin\n las guías Diagonales!"],
+         [35,20, "¡Has Ganado!"],
          [60,20, "¡Ahora intentalo sin\n las guías!"],
-         [35,20, "¡Has Ganado!"],
-         [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [35,20, "¡Has Ganado!"],
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
       
+        
       if(success < 2) this.preview = true;
       else this.preview = false;
         
-      if(success < 4) this.grid = true;
+      if(success < 6) this.grid = true;
       else this.grid = false;
+        
+      if(success < 4) this.gridD = true;
+      else this.gridD = false;
       
       //background
-       bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
-      
-       if (!(this.grid)) bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,'backgroundGridOff');
+       bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff');
+       bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
+        
+         if (!(this.gridD)) bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridDiagOff') ;
+        if (!(this.grid)) bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff') ;
         
       bg.anchor.setTo(0.5,0.5);
       bg.scale.setTo(0.55,0.55);
+      bgGrid.anchor.setTo(0.5,0.5);
+      bgGrid.scale.setTo(0.55,0.55);
+        
+        hud= this.game.add.sprite(0,655,'hud');
+        hud.scale.setTo(0.51,0.52);
+        
+        hudU= this.game.add.sprite(0,140,'hud');
+        hudU.scale.setTo(0.51,-0.52);
+        
+        //Barra de Progreso
+        
+        progress = this.game.add.sprite(120,40,'pborder');
+        progress.scale.setTo(0.3,0.03);
+        
+        intP = this.correct*0.024;
+
+        progressB = this.game.add.sprite(147,43,'pbar');
+        progressB.scale.setTo(intP,0.03);
+        
+        err = this.game.add.sprite(800,10,'error');
+        err.scale.setTo(0.1,0.1);
       
 		//La tierra (Siempre se crea en todos los niveles)
 		earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -89,7 +118,7 @@ Game.angulo.prototype = {
       earth.bringToTop();
 	
 		//Crea los enemigos
-		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,45*curQuad+90),300,10,earth,this.game);
+		enemy = new Enemy('enemy',generator.integerInRange(90*curQuad,90*curQuad+90),290,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.25,0.25);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -100,10 +129,10 @@ Game.angulo.prototype = {
       
       //Crear el boton de back
       console.log(this.game);
-      var b = this.game.add.button(this.game.world.width-30,30,'back',goToMenu,this,1,0,0);
+      var b = this.game.add.button(this.game.world.width-70,30,'back',goToMenu,this,1,0,0);
       b.anchor.setTo(0.05,0.05);
-      b.scale.setTo(0.25,0.25);
-	
+      b.scale.setTo(0.15,0.15);
+        	
 		//Crear un slider
 		this.sliders.angulo = new Slider(this.game,0,359,1,0);
 		this.sliders.angulo.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
@@ -135,7 +164,7 @@ Game.angulo.prototype = {
       });
       
       this.resText = this.game.add.text(
-         430,20,this.result,{
+         400,20,this.result,{
          font: '20px Arial',
          fill: '#FFFFFF',
          align: 'center'
@@ -153,16 +182,19 @@ Game.angulo.prototype = {
                 align: 'center'
             }
         );
+      arrowHint = this.game.add.sprite(850,600,'arrow');
+      if (success>1) arrowHint.scale.setTo(0,0);
+      else arrowHint.scale.setTo(0.25,0.25);
     }
                         this.cor = this.game.add.text(
-                840,20,"Éxitos: "+this.correct+"/10",{
+                170,20,"Éxitos \n"+this.correct+"/10",{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
                 }
             );
             this.err = this.game.add.text(
-                840,40,"Errores: "+this.error,{
+                820,40,"Errores \n "+this.error,{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'

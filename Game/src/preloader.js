@@ -34,13 +34,19 @@ Game.preloader.prototype = {
       this.load.image('menuBackground','assets/sprites/menuBackground.png');
       this.load.spritesheet('menuButton','assets/sprites/menuButtonSheet.png',421,401);
       this.load.image('background','assets/sprites/background.png');
-      this.load.image('backgroundGridOn','assets/sprites/backgroundGridOn.png');
+      this.load.image('backgroundGridOn','assets/sprites/backgroundGridRealOn.png');
       this.load.image('backgroundGridOff','assets/sprites/backgroundGridOff.png');
+      this.load.image('backgroundGridDiagOff','assets/sprites/backgroundGridDiagOff.png');
+      this.load.image('pborder','assets/sprites/ProgressBorder.png');
+      this.load.image('pbar','assets/sprites/progress.png');
+      this.load.image('error','assets/sprites/enemyInfo.png');
+      this.load.image('hud','assets/sprites/hudDown.png');
             
       this.load.spritesheet('bt1','assets/sprites/level1ButtonSheet.png',421,401);
       this.load.spritesheet('bt2','assets/sprites/level2ButtonSheet.png',421,401);
       this.load.spritesheet('bt3','assets/sprites/level3ButtonSheet.png',421,401);
-      this.load.spritesheet('back','assets/sprites/goBack.png',421,401);
+      this.load.spritesheet('back','assets/sprites/ExitButton.png',421,401);
+        this.load.image('arrow','assets/sprites/Arrow.png');
             
 	   Slider.preload(this,'space');
 		

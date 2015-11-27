@@ -197,3 +197,4 @@ function toRadian (state,pos) {
     state.rad.setText("R: "+Math.round(radio))
     state.ang.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)))
 }
+
