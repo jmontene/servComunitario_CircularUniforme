@@ -80,18 +80,18 @@ Game.radio_angulo.prototype = {
         
         // Barra de Progreso
         
-        hud= this.game.add.sprite(0,655,'hud');
+                hud= this.game.add.sprite(0,655,'hud');
         hud.scale.setTo(0.51,0.52);
         
         hudU= this.game.add.sprite(0,140,'hud');
         hudU.scale.setTo(0.51,-0.52);
         
-        progress = this.game.add.sprite(120,40,'pborder');
+        progress = this.game.add.sprite(100,40,'pborder');
         progress.scale.setTo(0.3,0.03);
         
         intP = this.correct*0.02;
 
-        progressB = this.game.add.sprite(147,43,'pbar');
+        progressB = this.game.add.sprite(127,43,'pbar');
         progressB.scale.setTo(intP,0.03);
 	
         err = this.game.add.sprite(800,10,'error');
@@ -153,11 +153,11 @@ Game.radio_angulo.prototype = {
             1,
             generator.integerInRange(90*curQuad,90*curQuad+90)
         );
-		this.sliders.angulo.create(650,700,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
+		this.sliders.angulo.create(650,725,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"φ",30,7);
 		this.prev.angulo = this.sliders.angulo.value;
 		
 		this.sliders.radio = new Slider(this.game,100,300,1,generator.integerInRange(100,300));
-		this.sliders.radio.create(650,750,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
+		this.sliders.radio.create(650,775,[0.03,0.03],[0.3,0.2],[0.2,0.2],15,"R",25,10);
 		this.prev.radio = this.sliders.radio.value;
       
       //Crear boton de back
@@ -175,13 +175,6 @@ Game.radio_angulo.prototype = {
 			]);
 		this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
-      this.timeText = this.game.add.text(
-	    10,10,"0",{
-		font: '20px Arial',
-		fill: '#FFFFFF',
-		align: 'center'
-	    });
-
       ship.change_angle(Phaser.Math.degToRad(this.sliders.angulo.value));
       ship.change_radio(this.sliders.radio.value);
       
@@ -195,7 +188,7 @@ Game.radio_angulo.prototype = {
 
     if(this.tutorial){
         var word = this.game.add.text(
-            100,730,"Usa los sliders para modificar\nla posicion a la que\nmovera la nave",{
+            100,710,"Usa los sliders para modificar\nla posicion a la que\nmovera la nave",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -206,7 +199,7 @@ Game.radio_angulo.prototype = {
       else arrowHint.scale.setTo(0.25,0.25);
     }
             this.cor = this.game.add.text(
-                170,20,"Éxitos \n"+this.correct+"/10",{
+                150,20,"Éxitos \n"+this.correct+"/10",{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
@@ -306,7 +299,6 @@ Game.radio_angulo.prototype = {
       if (seconds < 10)
          seconds = '0' + seconds;
 	
-      this.timeText.setText(seconds + ':' + milliseconds);
     },
     
    startGame: function(){

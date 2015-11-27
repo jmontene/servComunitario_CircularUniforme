@@ -65,12 +65,12 @@ Game.posicion.prototype = {
         
        //Barra de Progreso
         
-        progress = this.game.add.sprite(120,40,'pborder');
+        progress = this.game.add.sprite(100,40,'pborder');
         progress.scale.setTo(0.3,0.03);
         
         intP = this.correct*0.024;
 
-        progressB = this.game.add.sprite(147,43,'pbar');
+        progressB = this.game.add.sprite(127,43,'pbar');
         progressB.scale.setTo(intP,0.03);
         
         err = this.game.add.sprite(800,10,'error');
@@ -205,7 +205,7 @@ Game.posicion.prototype = {
         );
 
         this.cor = this.game.add.text(
-            170,20,"Éxitos \n"+this.correct+"/10",{
+            150,20,"Éxitos \n"+this.correct+"/10",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
