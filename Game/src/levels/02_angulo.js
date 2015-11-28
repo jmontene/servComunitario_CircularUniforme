@@ -27,6 +27,7 @@ Game.angulo = function (game) {
 
 Game.angulo.prototype = {
 
+
 	create: function () {
 
         this.popArgs = [
@@ -40,8 +41,7 @@ Game.angulo.prototype = {
             [35, 20, "¡Has Ganado!"],
             [35, 20, "¡Has Ganado!"],
             [60, 20, "Prepárate para el\n siguiente reto!!"]
-        ];
-      
+        ];     
         
         if (success < 2) {
             this.preview = true;
@@ -166,6 +166,7 @@ Game.angulo.prototype = {
 		mTarget.initialize();
       
       //Crear el misil
+
         missile = new Enemy(
             'missile',
             90,
@@ -190,6 +191,7 @@ Game.angulo.prototype = {
 		enemy.sprite.anchor.setTo(0.5, 0.5);
 		enemy.sprite.scale.setTo(0.25, 0.25);
 		this.game.physics.enable(enemy.sprite, Phaser.Physics.ARCADE);
+
 		enemy.sprite.body.collideWorldBounds = true;
         prev.sprite.bringToTop();
 
@@ -203,7 +205,7 @@ Game.angulo.prototype = {
             1,
             0
         );
-      
+
         //Crear el boton de back
         console.log(this.game);
         var b = this.game.add.button(
@@ -219,6 +221,7 @@ Game.angulo.prototype = {
         b.anchor.setTo(0.05, 0.05);
         b.scale.setTo(0.15, 0.15);
         	
+
 		//Crear un slider
 		this.sliders.angulo = new Slider(
             this.game,
@@ -265,6 +268,7 @@ Game.angulo.prototype = {
 			'40px Arial',
 			'#ffffff',
 			'center'
+
         ]
             );
         this.pop = new Popup(
@@ -286,7 +290,7 @@ Game.angulo.prototype = {
                 align: 'center'
             }
         );
-      
+
         this.resText = this.game.add.text(
             400,
             20,
@@ -297,7 +301,7 @@ Game.angulo.prototype = {
                 align: 'center'
             }
         );
-        
+
         this.result = "Intercepta el meteorito";
 	    console.log("Time: %f", this.time);
 	
@@ -307,6 +311,7 @@ Game.angulo.prototype = {
                 730,
                 "Usa el slider para modificar \n el angulo de lanzamiento",
                 {
+
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
@@ -376,6 +381,7 @@ Game.angulo.prototype = {
            collide_ally.call(this);
         }
         this.resText.setText(this.result);
+
    },
         
    updateTime: function () {

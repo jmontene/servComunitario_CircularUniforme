@@ -58,6 +58,7 @@ Game.preloader.prototype = {
         this.load.audio('fail', 'assets/audio/denied.ogg');
          
 	    Slider.preload(this, 'space');
+
 		
 	},
 	

@@ -27,8 +27,9 @@ Game.radio_angulo = function (game){
 		vel_angular : 0,
 		acc_angular : 0
 	}
-   
+
     this.neededTries = 12;
+
     this.tutorial = true;
     this.correct = 0;
     this.error = 0;
@@ -66,6 +67,7 @@ Game.radio_angulo.prototype = {
          [60,20, "Prepárate para el\n siguiente reto!!"]
       ];
         
+
       //background
         bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff');
        bgGrid = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOn');
@@ -168,7 +170,9 @@ Game.radio_angulo.prototype = {
 		this.prev.radio = this.sliders.radio.value;
       
       //Crear boton de back
+
       var b = this.game.add.button(this.game.world.width-70,30,'back',goToMenu,this,1,0,0);
+
       b.anchor.setTo(0.05,0.05);
       b.scale.setTo(0.15,0.15);
 		
@@ -207,6 +211,7 @@ Game.radio_angulo.prototype = {
     }
             this.cor = this.game.add.text(
                 150,16,"Éxitos \n"+this.correct+"/10",{
+
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
@@ -263,6 +268,7 @@ Game.radio_angulo.prototype = {
                 this.error++;
                 this.err.setText("Errores\n"+this.error);
                this.sTime = this.game.time.now;
+
             }else{
                 this.win = true;
                 this.correct++;

@@ -27,7 +27,7 @@ Game.posicion = function (game){
 	acc_angular : 0
     }
     
-    this.neededTries = 10;
+    this.neededTries = 8;
     this.tutorial = true;
     this.rad = "0";
     this.ang = "0";
@@ -43,8 +43,9 @@ Game.posicion = function (game){
 Game.posicion.prototype = {
     
     create: function (){
-    	
+  	
         if(success < 2) this.preview = true;
+
         else this.preview = false;
         
         
@@ -93,6 +94,7 @@ Game.posicion.prototype = {
 	earth.body.center.y = this.game.world.centerY
 
    	//Crea los enemigos
+      if(curQuad > 3) curQuad = 0;
         this.objangle = generator.integerInRange(90*curQuad,90*curQuad+90)
         this.objradio = generator.integerInRange(150,300)
 	enemy = new Enemy('satelite',this.objangle,this.objradio,10,earth,this.game);
@@ -113,9 +115,7 @@ Game.posicion.prototype = {
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
-            [35,20, "¡Has Ganado!"],
-            [35,20, "¡Has Ganado!"],
-            [35,20, "¡Has Ganado!"]
+            [80,20, "Felicidades! Luego intenta\n hacerlo sin errores!"]
         ];
         
         //Crear el popup
@@ -149,9 +149,11 @@ Game.posicion.prototype = {
     if (this.preview) mTarget.sprite.events.onDragUpdate.add(this.updateCoord,this);
         
    //Crear boton de back
+
     var b = this.game.add.button(this.game.world.width-70,30,'back',goToMenu,this,1,0,0);
     b.anchor.setTo(0.05,0.05);
     b.scale.setTo(0.15,0.15);
+
 
         if(this.objangle<0)
             this.objangle = 360 + this.objangle
@@ -213,6 +215,7 @@ Game.posicion.prototype = {
 
         this.cor = this.game.add.text(
             150,16,"Éxitos \n"+this.correct+"/10",{
+
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -257,6 +260,7 @@ Game.posicion.prototype = {
                   this.popArgs[this.neededTries-1] = [60,20, 
                   "Perfecto!\nFelicitaciones!"];
                 }
+                if(curQuad > 3) curQuad = 0;
                 this.game.state.getCurrentState().pop.show();
             }else{
                 failFx = this.game.add.audio('fail');
