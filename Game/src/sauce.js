@@ -106,6 +106,9 @@ Ally.prototype = {
 //Definicion de las colisiones
 function collide_earth(earth, enemy){
 	this.result = "Impacto. Intenta de Nuevo"
+    failFx = this.game.add.audio('fail');
+    failFx.volume = 0.2;
+    failFx.play();
     this.error++;
     this.err.setText("Errores\n"+this.error);
     onClick();

@@ -128,6 +128,13 @@ Game.posicion.prototype = {
 	]);
 	this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
 
+        arrowHint = this.game.add.sprite(500, 280, 'arrow');
+        if (this.correct > 0) {
+            arrowHint.scale.setTo(0, 0);
+        } else {
+            arrowHint.scale.setTo(0.2, 0.2);
+        }
+        
         //Crea AIM
         targetImg = 'aim';
 	mTarget = new Ally(targetImg,this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
@@ -252,6 +259,9 @@ Game.posicion.prototype = {
                 }
                 this.game.state.getCurrentState().pop.show();
             }else{
+                failFx = this.game.add.audio('fail');
+                failFx.volume = 0.2;
+                failFx.play();
                 this.error++;
 
                 this.err.setText("Errores\n"+this.error);

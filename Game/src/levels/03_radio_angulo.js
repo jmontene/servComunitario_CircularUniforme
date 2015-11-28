@@ -257,6 +257,9 @@ Game.radio_angulo.prototype = {
             ship.sprite.frame = 0;
             if(!this.coll){
                 this.lost = true;
+                failFx = this.game.add.audio('fail');
+                failFx.volume = 0.2;
+                failFx.play();
                 this.error++;
                 this.err.setText("Errores\n"+this.error);
                this.sTime = this.game.time.now;
