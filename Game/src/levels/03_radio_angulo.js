@@ -109,22 +109,29 @@ Game.radio_angulo.prototype = {
       
       //Target del misil
       var targetImg = "";
-      if(this.preview) targetImg = 'aim';
+      targetImg = 'aim';
 		mTarget = new Ally(targetImg,this.game.world.width,this.game.world.height,0.12,-1,earth,this.game);
 		mTarget.sprite.anchor.setTo(0.5,0.5);
-      mTarget.sprite.scale.setTo(0.09,0.09);
+        mTarget.sprite.scale.setTo(0,0);
+     if(this.preview) mTarget.sprite.scale.setTo(0.09,0.09);
 		mTarget.sprite.scale.x *= -mTarget.dir;
 		this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
 		mTarget.initialize();
 	
 		//Crea los enemigos
-        var eRadio = generator.integerInRange(150,350);
+        var eRadio = generator.integerInRange(150,300);
         while ( (eRadio < this.radio +30) && (eRadio > this.radio -30)) {
-            eRadio = generator.integerInRange(150,350);
+            eRadio = generator.integerInRange(150,300);
         }
-
         
-		enemy = new Enemy('satelite',generator.integerInRange(90*curQuad,90*curQuad+90),eRadio,10,earth,this.game);
+        if (this.correct < 3) {
+            eneRad = generator.integerInRange(0,4)*90;
+        } else {
+            eneRad = generator.integerInRange(90*curQuad,90*curQuad+90);
+        }
+    
+		enemy = new
+ Enemy('satelite',eneRad,eRadio,10,earth,this.game);
 		enemy.sprite.anchor.setTo(0.5,0.5);
 		enemy.sprite.scale.setTo(0.05,0.05);
 		this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
@@ -179,7 +186,7 @@ Game.radio_angulo.prototype = {
       ship.change_radio(this.sliders.radio.value);
       
       this.resText = this.game.add.text(
-         400,20,this.result,{
+         380,20,this.result,{
          font: '20px Arial',
          fill: '#FFFFFF',
          align: 'center'
@@ -199,14 +206,14 @@ Game.radio_angulo.prototype = {
       else arrowHint.scale.setTo(0.25,0.25);
     }
             this.cor = this.game.add.text(
-                150,20,"Éxitos \n"+this.correct+"/10",{
+                150,16,"Éxitos \n"+this.correct+"/10",{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
                 }
             );
             this.err = this.game.add.text(
-                820,40,"Errores\n"+this.error,{
+                820,36,"Errores \n"+this.error,{
                     font: '20px Arial',
                     fill: '#FFFFFF',
                     align: 'center'
@@ -251,7 +258,7 @@ Game.radio_angulo.prototype = {
             if(!this.coll){
                 this.lost = true;
                 this.error++;
-                this.err.setText("Errores: "+this.error);
+                this.err.setText("Errores\n"+this.error);
                this.sTime = this.game.time.now;
             }else{
                 this.win = true;
@@ -273,17 +280,17 @@ Game.radio_angulo.prototype = {
             this.doGame = false;
          }
 		}else if(!this.win){
-			this.time = 0;
+            this.time = 0;
 			enemy.reset();
-         ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
+            ship.change_angle(Phaser.Math.degToRad(this.prev.angulo));
 			ship.change_radio(this.prev.radio);
-         ship.move(0);
+            ship.move(0);
 		}
       
       this.updateTime();
       
       if(!this.coll){
-         this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite,null, null, this);
+         this.coll = this.game.physics.arcade.collide(ship.sprite, enemy.sprite, null, null, this);
       }
       
 		this.resText.setText(this.result);
@@ -291,7 +298,7 @@ Game.radio_angulo.prototype = {
    
    updateTime: function (){
       seconds = Math.floor((this.time) / 60);
-      milliseconds = Math.floor(this.time)%60;
+      milliseconds = Math.floor(this.time) % 60;
 
       if (milliseconds < 10)
          milliseconds = '0' + milliseconds;

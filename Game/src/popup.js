@@ -18,7 +18,7 @@ Popup = function(img,x,y,xScale,yScale,itemList,game){
 	for(i=0;i<itemList.length;++i){
 		var cur = itemList[i];
 		if(cur.type == 'text'){
-			this.text = this.game.add.text(this.x+cur.x,this.y+cur.y,cur.content,{
+			this.text = this.game.add.text(this.x+cur.x+5,this.y+cur.y+5,cur.content,{
 				font: cur.attr[0],
 				fill: cur.attr[1],
 				align: cur.attr[2]

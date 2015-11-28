@@ -36,6 +36,7 @@ Game.posicion = function (game){
     this.correct = 0;
     this.error = 0;
     this.intP = 0;
+    this.aimSoft;
 
 };
 
@@ -43,8 +44,9 @@ Game.posicion.prototype = {
     
     create: function (){
     	
-        if(success < 1) this.preview = true;
+        if(success < 2) this.preview = true;
         else this.preview = false;
+        
         
         //background
          bg = this.game.add.sprite(this.game.world.centerX-7,this.game.world.centerY+54,  'backgroundGridOff');
@@ -75,7 +77,11 @@ Game.posicion.prototype = {
         
         err = this.game.add.sprite(800,10,'error');
         err.scale.setTo(0.1,0.1);
-    
+     
+        this.aimSoft = this.game.add.sprite(0,0,'aimS');
+        this.aimSoft.scale.setTo(0,0);
+        //this.aimSoft.anchor.setTo(0.5,0.5);
+        
         
 	//La tierra (Siempre se crea en todos los niveles)
 	earth = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY,'earth');
@@ -95,21 +101,13 @@ Game.posicion.prototype = {
 	this.game.physics.enable(enemy.sprite,Phaser.Physics.ARCADE);
 	enemy.sprite.body.collideWorldBounds = true;
         enemy.sprite.visible = false;
-        if(this.preview){
-	    prev = new Enemy('sateliteprev',this.objangle,this.objradio,10,earth,this.game);
-	    prev.sprite.anchor.setTo(0.5,0.5);
-	    prev.sprite.scale.setTo(0.05,0.05);
-            prev.sprite.visible = false;
-            enemy.sprite.visible = true;
-            enemy.sprite.alpha = 0.5;
-        }
 
         //Crea button
 	button = this.game.add.button(475,730,'button',onClick,this,1,1,0);
         
         this.popArgs = [
             [35,20, "¡Has Ganado!"],
-            [35,20, "¡Has Ganado!"],
+            [60,20, "¡Ahora intentalo sin\n coordenas en tiempo real!"],
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
             [35,20, "¡Has Ganado!"],
@@ -141,6 +139,8 @@ Game.posicion.prototype = {
 	this.game.physics.enable(mTarget.sprite,Phaser.Physics.ARCADE);
 	mTarget.initialize();
    
+    if (this.preview) mTarget.sprite.events.onDragUpdate.add(this.updateCoord,this);
+        
    //Crear boton de back
     var b = this.game.add.button(this.game.world.width-70,30,'back',goToMenu,this,1,0,0);
     b.anchor.setTo(0.05,0.05);
@@ -174,7 +174,7 @@ Game.posicion.prototype = {
         );
         
         this.rmeh = this.game.add.text(
-            20,20,"R: 0",{
+            20,20,"R: ???" ,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -182,7 +182,7 @@ Game.posicion.prototype = {
         );
         
          this.ameh = this.game.add.text(
-            20,40,"φ: 0",{
+            20,40,"φ: ???",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -205,14 +205,14 @@ Game.posicion.prototype = {
         );
 
         this.cor = this.game.add.text(
-            150,20,"Éxitos \n"+this.correct+"/10",{
+            150,16,"Éxitos \n"+this.correct+"/10",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
         this.err = this.game.add.text(
-            820,40,"Errores\n"+this.error,{
+            820,36,"Errores \n"+this.error,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -227,6 +227,7 @@ Game.posicion.prototype = {
                 align: 'center'
             }
         );
+        
                 
     },
 
@@ -237,6 +238,8 @@ Game.posicion.prototype = {
         }else{
             mTarget.sprite.input.disableDrag();
             toRadian(this,mTarget.getPosition());
+            this.aimSoft.position.setTo(mTarget.sprite.body.x,mTarget.sprite.body.y);
+            this.aimSoft.scale.setTo(0.09,0.09);
             
             console.log(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true))
             if(Phaser.Point.distance(enemy.sprite.body.center,mTarget.sprite.body.center,true)<36){
@@ -250,10 +253,8 @@ Game.posicion.prototype = {
                 this.game.state.getCurrentState().pop.show();
             }else{
                 this.error++;
-                if(this.preview){
-	            prev.sprite.visible = true;
-                }
-                this.err.setText("Errores: "+this.error);
+
+                this.err.setText("Errores\n"+this.error);
             }
             
             button.setFrames(1,1,0);
@@ -264,19 +265,27 @@ Game.posicion.prototype = {
         
     },
     
-    updateTime: function (){
-        seconds = Math.floor((this.time) / 60);
-        milliseconds = Math.floor(this.time)%60;
+    updateCoord: function (){
         
+        var x = mTarget.getPosition().x
+        var y = mTarget.getPosition().y
 
-        if (milliseconds < 10)
-            milliseconds = '0' + milliseconds;
-	
-        if (seconds < 10)
-            seconds = '0' + seconds;
-	
-        this.timeText.setText(seconds + ':' + milliseconds);
-
+        var radio = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        var angle = 0;
+        if(x<0)
+            angle = Math.atan(y/x) + Math.PI
+        if(x==0 && y>0)
+            angle = Math.PI/2
+        if(x==0 && y<0)
+            angle = (3*Math.PI)/2
+        if(y>=0 && x>0)
+            angle = Math.atan(y/x)
+        if(y<0 && x>0)
+            angle = Math.atan(y/x) + 2*Math.PI
+            
+        this.rmeh.setText("R: "+Math.round(radio));
+        this.ameh.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)));
+            
     },
     
     startGame: function(){

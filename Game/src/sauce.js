@@ -107,7 +107,7 @@ Ally.prototype = {
 function collide_earth(earth, enemy){
 	this.result = "Impacto. Intenta de Nuevo"
     this.error++;
-    this.err.setText("Errores: "+this.error);
+    this.err.setText("Errores\n"+this.error);
     onClick();
 }
 
@@ -130,6 +130,9 @@ function collide_find(mTarget, ally){
 function nextLevel(){
    state = this.game.state.getCurrentState();
    console.log(state);
+   winFx = this.game.add.audio('win');
+   winFx.volume = 0.2;
+   winFx.play();
    success += 1;
    curQuad += 1;
    if(success != state.neededTries){
@@ -144,7 +147,8 @@ function nextLevel(){
 
 //Se activa cuando se le da click al boton
 function onClick () {
-	play =! play;
+
+    play =! play;
 	if(play){
 		button.setFrames(0,0,1);
 	}else{
@@ -156,15 +160,19 @@ function onClickWithCounter () {
 	if(play){
 	    button.setFrames(0,0,1);
         }else{
-	    button.setFrames(1,1,0);
+            button.setFrames(1,1,0);
+            failFx = this.game.add.audio('fail');
+            failFx.volume = 0.2;
+            failFx.play();
             this.game.state.getCurrentState().error++;
-            this.game.state.getCurrentState().err.setText("Errores: "+this.error);
+            this.game.state.getCurrentState().err.setText("Errores\n"+this.error);
 	}
 }
 
 function goToMenu() {
     success = 0;
     curQuad = 1;
+    buttonFx.play();
     this.correct = 0;
     this.error = 0;
     console.log(success);
@@ -197,4 +205,3 @@ function toRadian (state,pos) {
     state.rad.setText("R: "+Math.round(radio))
     state.ang.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)))
 }
-

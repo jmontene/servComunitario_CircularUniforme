@@ -35,7 +35,7 @@ Slider.prototype = {
 		this.sprites.button.anchor.setTo(0.5,0.5);
 		this.sprites.button.scale.setTo(scaleB[0],scaleB[1]);
 		
-		this.text = this.game.add.text(xCoord+this.sprites.monitor.width/2+1,yCoord,this.initValue,{
+		this.text = this.game.add.text(xCoord+this.sprites.monitor.width/2+1,yCoord+3,this.initValue,{
 			font: fontSize + 'px Arial',
 			fill: '#ffffff',
 			align: 'center'
