@@ -56,6 +56,7 @@ Game.preloader.prototype = {
         this.load.audio('buttonS', 'assets/audio/button.ogg');
         this.load.audio('win', 'assets/audio/success.ogg');
         this.load.audio('fail', 'assets/audio/denied.ogg');
+        this.load.audio('ex', 'assets/audio/explosion.ogg');
          
 	    Slider.preload(this, 'space');
 

@@ -117,6 +117,9 @@ function collide_earth(earth, enemy){
 function collide_ally(earth, enemy){
 	console.log("collide_Ally was called");
 	this.result = "Lo has logrado!"
+    exFx = this.game.add.audio('ex');
+    exFx.volume = 1;
+    exFx.play();
     onClick();
     this.game.state.getCurrentState().correct++;
     this.game.state.getCurrentState().pop.show();    

@@ -68,12 +68,12 @@ Game.posicion.prototype = {
         
        //Barra de Progreso
         
-        progress = this.game.add.sprite(100,40,'pborder');
+        progress = this.game.add.sprite(70,40,'pborder');
         progress.scale.setTo(0.3,0.03);
         
         intP = this.correct*0.024;
 
-        progressB = this.game.add.sprite(127,43,'pbar');
+        progressB = this.game.add.sprite(97,43,'pbar');
         progressB.scale.setTo(intP,0.03);
         
         err = this.game.add.sprite(800,10,'error');
@@ -126,14 +126,17 @@ Game.posicion.prototype = {
 	    '#ffffff',
 	    'center'
 	]);
-	this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
-
+        
         arrowHint = this.game.add.sprite(500, 280, 'arrow');
         if (this.correct > 0) {
             arrowHint.scale.setTo(0, 0);
         } else {
             arrowHint.scale.setTo(0.2, 0.2);
         }
+        
+	this.pop = new Popup('panel',this.game.width/2,-150,curArgs[0],curArgs[1],[but,t],this.game);
+        
+
         
         //Crea AIM
         targetImg = 'aim';
@@ -159,7 +162,7 @@ Game.posicion.prototype = {
             this.objangle = 360 + this.objangle
         
         this.obj = this.game.add.text(
-            350,40,"Sus coordenadas son R:"+this.objradio+" φ:"+this.objangle,{
+            355,40,"Sus coordenadas son R:"+this.objradio+" φ:"+this.objangle,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -175,7 +178,7 @@ Game.posicion.prototype = {
         );
 
         this.game.add.text(
-            730,710,"Elegiste las coordenadas",{
+            750,690,"Coordenadas\n Tiempo Real      Anteriores",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -183,7 +186,7 @@ Game.posicion.prototype = {
         );
         
         this.rmeh = this.game.add.text(
-            20,20,"R: ???" ,{
+            780, 740,"R: ???" ,{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -191,7 +194,7 @@ Game.posicion.prototype = {
         );
         
          this.ameh = this.game.add.text(
-            20,40,"φ: ???",{
+            780, 758,"φ: ???",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -199,14 +202,14 @@ Game.posicion.prototype = {
         );
         
         this.rad = this.game.add.text(
-            840,730,"R: 0",{
+            930,740,"R: 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
             }
         );
         this.ang = this.game.add.text(
-            840,750,"φ: 0",{
+            930,758,"φ: 0",{
                 font: '20px Arial',
                 fill: '#FFFFFF',
                 align: 'center'
@@ -214,7 +217,7 @@ Game.posicion.prototype = {
         );
 
         this.cor = this.game.add.text(
-            150,16,"Éxitos \n"+this.correct+"/10",{
+            120,16,"Éxitos \n"+this.correct+"/10",{
 
                 font: '20px Arial',
                 fill: '#FFFFFF',

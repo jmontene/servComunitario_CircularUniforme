@@ -82,18 +82,18 @@ Game.radio_angulo.prototype = {
         
         // Barra de Progreso
         
-                hud= this.game.add.sprite(0,655,'hud');
+        hud= this.game.add.sprite(0,655,'hud');
         hud.scale.setTo(0.51,0.52);
         
         hudU= this.game.add.sprite(0,140,'hud');
         hudU.scale.setTo(0.51,-0.52);
         
-        progress = this.game.add.sprite(100,40,'pborder');
+        progress = this.game.add.sprite(70,40,'pborder');
         progress.scale.setTo(0.3,0.03);
         
         intP = this.correct*0.02;
 
-        progressB = this.game.add.sprite(127,43,'pbar');
+        progressB = this.game.add.sprite(97,43,'pbar');
         progressB.scale.setTo(intP,0.03);
 	
         err = this.game.add.sprite(800,10,'error');
@@ -210,7 +210,7 @@ Game.radio_angulo.prototype = {
       else arrowHint.scale.setTo(0.25,0.25);
     }
             this.cor = this.game.add.text(
-                150,16,"Éxitos \n"+this.correct+"/10",{
+                120,16,"Éxitos \n"+this.correct+"/10",{
 
                     font: '20px Arial',
                     fill: '#FFFFFF',
