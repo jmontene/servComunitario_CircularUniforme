@@ -240,18 +240,6 @@ Game.angulo.prototype = {
                                    30,
                                    7
                                   );
-      
-        //Crear el texto del angulo
-        this.angleText = this.game.add.text(
-            earth.x - 25,
-            earth.y + 50,
-            '',
-            {
-                font: '30px Arial',
-                fill: '#000000',
-                align: 'center'
-            }
-        );
 
 		
 		//Crear el popup
@@ -352,7 +340,6 @@ Game.angulo.prototype = {
     update: function () {
         this.sliders.angulo.update();
 
-        this.angleText.setText(this.sliders.angulo.value + '°');
 
         if (play) {
             this.time++;

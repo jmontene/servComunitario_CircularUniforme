@@ -284,6 +284,8 @@ Game.posicion.prototype = {
     
     updateCoord: function (){
         
+        arrowHint.scale.setTo(0, 0);
+        
         var x = mTarget.getPosition().x
         var y = mTarget.getPosition().y
 
