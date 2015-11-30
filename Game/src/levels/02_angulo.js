@@ -241,6 +241,7 @@ Game.angulo.prototype = {
                                    7
                                   );
 
+
 		
 		//Crear el popup
 		var but = new Item(
@@ -343,7 +344,6 @@ Game.angulo.prototype = {
 
         if (play) {
             this.time++;
-            this.angleText.setText(this.sliders.angulo.value + '°');
             this.game.physics.arcade.moveToObject(enemy.sprite, earth, enemy.speed);
             this.game.physics.arcade.moveToObject(missile.sprite, mTarget.sprite, missile.speed);
             this.result = "...";

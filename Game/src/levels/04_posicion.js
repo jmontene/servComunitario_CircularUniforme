@@ -304,6 +304,7 @@ Game.posicion.prototype = {
             
         this.rmeh.setText("R: "+Math.round(radio));
         this.ameh.setText("φ: "+Math.round(Phaser.Math.radToDeg(angle)));
+
             
     },
     
